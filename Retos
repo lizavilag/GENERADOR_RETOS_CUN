@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador Universal de Retos y Simuladores Académicos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .fade-in {
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- BARRA SUPERIOR INSTITUCIONAL -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-inner shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-extrabold tracking-tight leading-tight">
+            Generador Universal de Retos y Simuladores Académicos
+          </h1>
+          <p class="text-xs text-slate-400">
+            Motor multidisciplinario para convertir cualquier gránulo temático en experiencias interactivas
+          </p>
+        </div>
+      </div>
+
+      <!-- NAVEGACIÓN DE PESTAÑAS -->
+      <nav class="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700 self-start md:self-auto">
+        <button id="tab-btn-docente" onclick="cambiarVista('docente')"
+          class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm">
+          <span>1. Gránulo Temático</span>
+        </button>
+
+        <button id="tab-btn-estudiante" onclick="cambiarVista('estudiante')" disabled
+          class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-400 opacity-50 cursor-not-allowed">
+          <span>2. Simulador Interactivo</span>
+        </button>
+
+        <button id="tab-btn-ficha" onclick="cambiarVista('ficha')" disabled
+          class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-400 opacity-50 cursor-not-allowed">
+          <span>3. Ficha y Exportación</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR DE MENSAJES DE NOTIFICACIÓN (SIN ALERT) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- =================================================================== -->
+    <!-- VISTA 1: GRÁNULO TEMÁTICO (ENTRADA DEL DOCENTE - 100% EN BLANCO)    -->
+    <!-- =================================================================== -->
+    <section id="vista-docente" class="fade-in grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Formulario Principal -->
+      <div class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-6 border-b border-slate-100">
+          <div>
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md mb-1.5">
+              Diseño Instruccional Agnóstico
+            </span>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Ingresar Gránulo de la Semana</h2>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="limpiarFormulario()"
+              class="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition">
+              Limpiar campos
+            </button>
+          </div>
+        </div>
+
+        <!-- Barra de Ejemplos Multidisciplinarios Opcionales -->
+        <div class="mb-6 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-wrap items-center justify-between gap-2">
+          <span class="text-xs font-semibold text-slate-600">
+            ¿Deseas probar la versatilidad? Cargar muestra de otra facultad:
+          </span>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="cargarMuestra('salud')"
+              class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-emerald-500 hover:text-emerald-700 transition shadow-2xs">
+              + Salud / Enfermería
+            </button>
+            <button type="button" onclick="cargarMuestra('derecho')"
+              class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 hover:text-indigo-700 transition shadow-2xs">
+              + Derecho Penal
+            </button>
+            <button type="button" onclick="cargarMuestra('ingenieria')"
+              class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-sky-500 hover:text-sky-700 transition shadow-2xs">
+              + Ingeniería / Software
+            </button>
+          </div>
+        </div>
+
+        <!-- Alerta de Validación / Error -->
+        <div id="error-box" class="hidden mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-start gap-3">
+          <svg class="w-5 h-5 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <p id="error-text"></p>
+        </div>
+
+        <form id="form-granulo" onsubmit="generarActividad(event)" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="sm:col-span-2">
+              <label for="input-asignatura" class="block text-sm font-semibold text-slate-700 mb-1.5">
+                Nombre de la Asignatura *
+              </label>
+              <input id="input-asignatura" type="text" required
+                placeholder="Ej: Derecho Constitucional / Biología Celular / Contabilidad II"
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition" />
+            </div>
+
+            <div>
+              <label for="input-unidad" class="block text-sm font-semibold text-slate-700 mb-1.5">
+                Unidad o Semana *
+              </label>
+              <input id="input-unidad" type="text" required
+                placeholder="Ej: Semana 4 / Unidad 2"
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="input-titulo" class="block text-sm font-semibold text-slate-700 mb-1.5">
+                Título del Gránulo Temático *
+              </label>
+              <input id="input-titulo" type="text" required
+                placeholder="Ej: Tipicidad y Antijuridicidad / Mitosis y Meiosis / Derivadas Parciales"
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition" />
+            </div>
+
+            <div>
+              <label for="input-dinamica" class="block text-sm font-semibold text-slate-700 mb-1.5">
+                Dinámica Pedagógica *
+              </label>
+              <select id="input-dinamica"
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm font-medium text-slate-800 transition">
+                <option value="Simulador de Toma de Decisiones (Caso aplicado en 4 etapas)">1. Simulador de Toma de Decisiones (Caso en 4 etapas)</option>
+                <option value="Juego de Roles / Resolución de Crisis Profesional">2. Juego de Roles / Resolución de Crisis Profesional</option>
+                <option value="Trivia Gamificada de Diagnóstico y Conceptos">3. Trivia Gamificada de Diagnóstico y Conceptos</option>
+                <option value="Clasificador de Matrices / Análisis Crítico">4. Clasificador de Matrices / Análisis Crítico</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="input-objetivo" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Resultado de Aprendizaje (Objetivo) *
+            </label>
+            <input id="input-objetivo" type="text" required
+              placeholder="Ej: Diagnosticar fallas estructurales aplicando los criterios normativos estudiados en clase..."
+              class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition" />
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="input-contenido" class="block text-sm font-semibold text-slate-700">
+                Contenido Clave / Conceptos del Gránulo *
+              </label>
+              <span class="text-xs text-slate-400">Base conceptual estricta para la actividad</span>
+            </div>
+            <textarea id="input-contenido" rows="6" required
+              placeholder="Pega aquí el resumen teórico, definiciones, fórmulas, protocolos, artículos legales o lecturas clave de la semana. El simulador se construirá 100% sobre este contenido..."
+              class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm leading-relaxed transition"></textarea>
+          </div>
+
+          <div class="pt-2">
+            <button id="btn-generar" type="submit"
+              class="w-full bg-slate-900 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition-all flex items-center justify-center gap-2.5 text-sm sm:text-base cursor-pointer">
+              <svg id="icon-sparkle" class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              </svg>
+              <svg id="icon-spinner" class="hidden w-5 h-5 animate-spin text-emerald-400" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+              <span id="btn-generar-texto">Generar Actividad Interactiva y Ficha Docente</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Columna Lateral Informativa -->
+      <aside class="lg:col-span-4 space-y-6">
+        <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-sm border border-slate-800">
+          <h3 class="text-base font-bold text-emerald-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            </svg>
+            Arquitectura Pedagógica
+          </h3>
+          <div class="space-y-4 text-sm text-slate-300">
+            <div class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">1</span>
+              <p><strong class="text-white">Cero sesgo disciplinar:</strong> El motor adapta el vocabulario técnico, el rol profesional y los dilemas exclusivamente a la materia ingresada.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">2</span>
+              <p><strong class="text-white">4 Etapas Secuenciales:</strong> Cada desafío evalúa criterios específicos del gránulo con retroalimentación formativa inmediata.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">3</span>
+              <p><strong class="text-white">Exportación Autónoma:</strong> Descarga un archivo HTML jugable independiente para incrustar en Moodle, Canvas o GitHub Pages.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+          <h4 class="font-bold text-slate-900 text-sm mb-2.5 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            Recomendación para el Gránulo
+          </h4>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Para obtener escenarios de alta precisión técnica, incluye en el campo <strong>Contenido Clave</strong> los conceptos centrales, clasificaciones, criterios de decisión o errores frecuentes que los estudiantes suelen cometer en ese tema.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VISTA 2: SIMULADOR INTERACTIVO (VISTA DEL ESTUDIANTE)               -->
+    <!-- =================================================================== -->
+    <section id="vista-estudiante" class="hidden fade-in max-w-4xl mx-auto">
+      <!-- Encabezado del Escenario -->
+      <div class="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-md mb-6 border-b-4 border-emerald-500">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="est-badge-asignatura" class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full"></span>
+            <span id="est-badge-dinamica" class="bg-slate-800 text-emerald-400 border border-slate-700 text-xs font-semibold px-3 py-1 rounded-full"></span>
+          </div>
+          <span id="est-rol" class="text-xs font-semibold text-slate-300 bg-slate-800/90 px-3 py-1.5 rounded-lg border border-slate-700"></span>
+        </div>
+
+        <h2 id="est-titulo" class="text-2xl sm:text-3xl font-extrabold text-white mb-4"></h2>
+
+        <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 sm:p-5">
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 block mb-1">
+            Contexto Profesional del Caso
+          </span>
+          <p id="est-contexto" class="text-sm sm:text-base text-slate-200 leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- Contenedor Dinámico del Juego (Etapa activa o Resultados finales) -->
+      <div id="zona-juego-activa" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <!-- Barra de progreso -->
+        <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+          <span id="juego-progreso-texto">Etapa 1 de 4</span>
+          <span id="juego-puntaje-texto" class="text-indigo-700">Puntaje: 0 pts</span>
+        </div>
+        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-8">
+          <div id="juego-barra-progreso" class="bg-emerald-500 h-full transition-all duration-500" style="width: 25%"></div>
+        </div>
+
+        <!-- Pregunta y Opciones -->
+        <div class="mb-6">
+          <span id="etapa-subtitulo" class="inline-block text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md mb-2"></span>
+          <h3 id="etapa-pregunta" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug"></h3>
+        </div>
+
+        <div id="etapa-opciones" class="space-y-3.5 mb-6"></div>
+
+        <!-- Panel de Retroalimentación Inmediata -->
+        <div id="etapa-feedback" class="hidden p-5 rounded-xl border mb-6 transition-all">
+          <div class="flex items-center justify-between mb-1.5">
+            <span id="feedback-nivel" class="font-bold text-sm"></span>
+            <span id="feedback-puntos" class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-white/90 shadow-2xs"></span>
+          </div>
+          <p id="feedback-texto" class="text-sm leading-relaxed"></p>
+        </div>
+
+        <div class="flex justify-end">
+          <button id="btn-siguiente-etapa" onclick="avanzarEtapa()" disabled
+            class="bg-slate-900 hover:bg-indigo-700 disabled:bg-slate-300 text-white font-bold py-3 px-6 rounded-xl transition flex items-center gap-2 text-sm cursor-pointer disabled:cursor-not-allowed">
+            <span id="btn-siguiente-texto">Confirmar y Continuar</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pantalla Final de Resultados -->
+      <div id="zona-juego-resultados" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 fade-in">
+        <div class="text-center pb-8 mb-8 border-b border-slate-100">
+          <div id="res-icono-box" class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+          </div>
+          <span id="res-nivel-badge" class="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2"></span>
+          <h3 id="res-puntaje-final" class="text-3xl font-extrabold text-slate-900"></h3>
+          <p id="res-mensaje-final" class="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed mt-3"></p>
+        </div>
+
+        <h4 class="font-bold text-slate-900 text-base sm:text-lg mb-4">Bitácora de Decisiones y Retroalimentación</h4>
+        <div id="res-bitacora" class="space-y-4 mb-8"></div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
+          <button onclick="reiniciarSimulador()"
+            class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-5 rounded-xl transition text-sm cursor-pointer">
+            Reiniciar Simulador
+          </button>
+
+          <div class="flex flex-wrap gap-3">
+            <button onclick="exportarEvidenciaEstudiante()"
+              class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-bold py-3 px-5 rounded-xl transition text-sm cursor-pointer">
+              Descargar Evidencia (.txt)
+            </button>
+            <button onclick="cambiarVista('ficha')"
+              class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-5 rounded-xl transition text-sm cursor-pointer">
+              Ir a Ficha Docente
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VISTA 3: FICHA PEDAGÓGICA Y EXPORTACIÓN (VISTA DEL DOCENTE)         -->
+    <!-- =================================================================== -->
+    <section id="vista-ficha" class="hidden fade-in max-w-5xl mx-auto">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <!-- Cabecera de Ficha con Botones de Acción -->
+        <div class="bg-slate-900 text-white p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              Guía Instruccional Lista para LMS
+            </span>
+            <h2 id="ficha-titulo-reto" class="text-2xl font-bold mt-1"></h2>
+            <p id="ficha-meta" class="text-sm text-slate-400 mt-1"></p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <button onclick="copiarFichaPortapapeles()"
+              class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold py-2.5 px-4 rounded-xl text-xs sm:text-sm transition cursor-pointer">
+              Copiar Ficha al Portapapeles
+            </button>
+
+            <button onclick="descargarHtmlStandalone()"
+              class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-2.5 px-4 rounded-xl text-xs sm:text-sm shadow-sm transition cursor-pointer flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Descargar Juego HTML (.html)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 5 Bloques Pedagógicos Estándar -->
+        <div class="p-6 sm:p-8 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 border-l-4 border-l-slate-900">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                1. Situación / Contexto
+              </h3>
+              <p id="ficha-situacion" class="text-sm text-slate-800 leading-relaxed"></p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 border-l-4 border-l-indigo-600">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                2. Misión / Desafío
+              </h3>
+              <p id="ficha-mision" class="text-sm text-slate-800 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+              3. Instrucciones de Desarrollo
+            </h3>
+            <ol id="ficha-instrucciones" class="list-decimal list-inside space-y-2 text-sm text-slate-800"></ol>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-5 rounded-xl bg-emerald-50/60 border border-emerald-200">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-2">
+                4. Producto Esperado
+              </h3>
+              <p id="ficha-producto" class="text-sm text-slate-800 leading-relaxed"></p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                5. Justificación y Criterios de Rúbrica
+              </h3>
+              <p id="ficha-justificacion" class="text-sm text-slate-800 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- Nota de uso para LMS -->
+          <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 text-xs sm:text-sm text-indigo-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <strong>¿Cómo publicar este simulador a tus estudiantes?</strong> Haz clic en <em>"Descargar Juego HTML (.html)"</em> y súbelo directamente como recurso en Moodle, Canvas, Brightspace o GitHub Pages. Funciona sin internet y sin claves API.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white py-4 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+      <span>Generador Universal de Retos y Simuladores Académicos</span>
+      <span>Compatible con todas las áreas del conocimiento</span>
+    </div>
+  </footer>
+
+  <!-- LÓGICA DE LA APLICACIÓN -->
+  <script>
+    // Muestras multidisciplinarias opcionales (no se cargan por defecto; el formulario inicia 100% vacío)
+    const MUESTRAS_DISCIPLINARES = {
+      salud: {
+        asignatura: "Enfermería en Urgencias y Cuidados Críticos",
+        unidad: "Semana 5 - Unidad 2",
+        titulo: "Protocolo de Triaje y Manejo Inicial de Sepsis",
+        dinamica: "Juego de Roles / Resolución de Crisis Profesional",
+        objetivo: "Priorizar intervenciones clínicas basadas en signos de alarma hemodinámica y aplicar el paquete de medidas de la primera hora (Hour-1 Bundle).",
+        contenido: "La sepsis es una disfunción orgánica potencialmente mortal causada por una respuesta desregulada del huésped a la infección. Criterios qSOFA: frecuencia respiratoria >= 22 rpm, alteración del estado mental (Glasgow < 15) y presión arterial sistólica <= 100 mmHg. El paquete de la primera hora exige: 1) Medir nivel de lactato sérico; 2) Obtener hemocultivos antes de administrar antibióticos; 3) Administrar antibióticos de amplio espectro por vía intravenosa; 4) Iniciar reanimación rápida con cristaloides (30 ml/kg) si hay hipotensión o lactato >= 4 mmol/L; 5) Aplicar vasopresores si persiste hipotensión durante o después de la reanimación hídrica para mantener PAM >= 65 mmHg."
+      },
+      derecho: {
+        asignatura: "Derecho Penal General",
+        unidad: "Unidad 3 - Semana 7",
+        titulo: "Teoría del Delito: Tipicidad, Antijuridicidad y Causales de Justificación",
+        dinamica: "Simulador de Toma de Decisiones (Caso aplicado en 4 etapas)",
+        objetivo: "Determinar la existencia de responsabilidad penal evaluando los elementos objetivos y subjetivos del tipo penal y la procedencia de la legítima defensa.",
+        contenido: "Para que una conducta sea punible se requiere que sea típica, antijurídica y culpable. La tipicidad exige adecuación exacta al supuesto de hecho legal (elementos objetivos, sujeto activo/pasivo, verbo rector) y elemento subjetivo (dolo, culpa o preterintención). La antijuridicidad implica lesión o puesta en peligro efectiva del bien jurídico sin justa causa. Causales de ausencia de responsabilidad (Art. 32 CP): legítima defensa (agresión actual o inminente, injusta, necesidad de defensa y proporcionalidad del medio empleado), estado de necesidad justificante y estricto cumplimiento de un deber legal. Si falta proporcionalidad, se configura exceso en la legítima defensa con atenuación punitiva."
+      },
+      ingenieria: {
+        asignatura: "Arquitectura de Software y Sistemas Distribuidos",
+        unidad: "Semana 6 - Módulo 3",
+        titulo: "Teorema CAP, Consistencia Eventual y Tolerancia a Particiones",
+        dinamica: "Clasificador de Matrices / Análisis Crítico",
+        objetivo: "Seleccionar estrategias de replicación y almacenamiento distribuido equilibrando disponibilidad y consistencia según los requisitos críticos del negocio.",
+        contenido: "El Teorema CAP establece que en un sistema distribuido de datos es imposible garantizar simultáneamente más de dos de las siguientes tres propiedades: Consistencia (Consistency: todos los nodos ven los mismos datos al mismo tiempo), Disponibilidad (Availability: cada solicitud recibe una respuesta sin garantía de que contenga la versión más reciente) y Tolerancia a Particiones (Partition Tolerance: el sistema sigue operando pese a pérdida o retraso de mensajes entre nodos). Ante una partición de red (P), el arquitecto debe elegir entre CP (prioriza consistencia rechazando escrituras/lecturas inseguras, ideal para transacciones bancarias) o AP (prioriza disponibilidad permitiendo lecturas eventualmente consistentes, ideal para carritos de compra o catálogos)."
+      }
+    };
+
+    // Estado global de la aplicación
+    let estado = {
+      metadatos: null,
+      actividad: null,
+      etapaActual: 0,
+      opcionSeleccionada: null,
+      historial: []
+    };
+
+    // Utilidad para mostrar notificaciones no intrusivas (reemplaza alert)
+    function mostrarNotificacion(mensaje, tipo = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colores = tipo === 'exito'
+        ? 'bg-emerald-900 text-emerald-50 border-emerald-700'
+        : tipo === 'error'
+        ? 'bg-rose-900 text-rose-50 border-rose-700'
+        : 'bg-slate-900 text-white border-slate-700';
+
+      toast.className = `pointer-events-auto px-4 py-3 rounded-xl border shadow-lg text-xs sm:text-sm font-medium fade-in ${colores}`;
+      toast.textContent = mensaje;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Cambiar entre las 3 vistas principales
+    function cambiarVista(vista) {
+      if ((vista === 'estudiante' || vista === 'ficha') && !estado.actividad) {
+        mostrarNotificacion("Primero genera una actividad desde la pestaña Gránulo Temático.", "error");
+        return;
+      }
+
+      ['docente', 'estudiante', 'ficha'].forEach(v => {
+        const sec = document.getElementById(`vista-${v}`);
+        const btn = document.getElementById(`tab-btn-${v}`);
+        if (v === vista) {
+          sec.classList.remove('hidden');
+          btn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+          btn.classList.remove('text-slate-300', 'text-slate-400');
+        } else {
+          sec.classList.add('hidden');
+          btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
+          btn.classList.add(estado.actividad ? 'text-slate-300' : 'text-slate-400');
+        }
+      });
+    }
+
+    // Habilitar pestañas de estudiante y ficha tras generar actividad
+    function habilitarPestanasSecundarias() {
+      ['estudiante', 'ficha'].forEach(v => {
+        const btn = document.getElementById(`tab-btn-${v}`);
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed', 'text-slate-400');
+        btn.classList.add('text-slate-300', 'hover:text-white', 'cursor-pointer');
+      });
+    }
+
+    // Cargar muestra opcional de otra facultad
+    function cargarMuestra(clave) {
+      const m = MUESTRAS_DISCIPLINARES[clave];
+      if (!m) return;
+      document.getElementById('input-asignatura').value = m.asignatura;
+      document.getElementById('input-unidad').value = m.unidad;
+      document.getElementById('input-titulo').value = m.titulo;
+      document.getElementById('input-dinamica').value = m.dinamica;
+      document.getElementById('input-objetivo').value = m.objetivo;
+      document.getElementById('input-contenido').value = m.contenido;
+      document.getElementById('error-box').classList.add('hidden');
+      mostrarNotificacion(`Muestra de ${m.asignatura} cargada en el formulario.`);
+    }
+
+    // Limpiar todos los campos
+    function limpiarFormulario() {
+      document.getElementById('form-granulo').reset();
+      document.getElementById('error-box').classList.add('hidden');
+      mostrarNotificacion("Campos del formulario limpios.");
+    }
+
+    // Llamada a Gemini API para construir el simulador y la ficha pedagógica
+    async function generarActividad(event) {
+      event.preventDefault();
+
+      const asignatura = document.getElementById('input-asignatura').value.trim();
+      const unidad = document.getElementById('input-unidad').value.trim();
+      const titulo = document.getElementById('input-titulo').value.trim();
+      const dinamica = document.getElementById('input-dinamica').value;
+      const objetivo = document.getElementById('input-objetivo').value.trim();
+      const contenido = document.getElementById('input-contenido').value.trim();
+
+      const errorBox = document.getElementById('error-box');
+      const errorText = document.getElementById('error-text');
+
+      if (!asignatura || !titulo || !contenido) {
+        errorText.textContent = "Por favor completa la asignatura, el título del gránulo y el contenido clave.";
+        errorBox.classList.remove('hidden');
+        return;
+      }
+
+      errorBox.classList.add('hidden');
+      setEstadoCarga(true);
+
+      const apiKey = ""; // Inyectada automáticamente en tiempo de ejecución
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const systemInstruction = `Eres un experto diseñador instruccional universitario especializado en aprendizaje activo y gamificación educativa para TODAS las disciplinas académicas (Ciencias de la Salud, Derecho, Ingenierías, Ciencias Exactas, Humanidades, Artes, Ciencias Económicas, etc.).
+Tu tarea es transformar el gránulo temático ingresado por el docente en una actividad interactiva rigurosa, técnica y 100% fiel a los conceptos proporcionados.
+REGLAS ESTRICTAS:
+1. Adapta todo el lenguaje, el rol del estudiante, el escenario y los criterios de evaluación EXCLUSIVAMENTE a la asignatura y al contenido proporcionado por el docente. Nunca introduzcas temas ajenos a la materia ingresada.
+2. Genera exactamente 4 etapas o desafíos progresivos.
+3. Cada etapa debe tener exactamente 3 opciones de respuesta/decisión plausibles, donde una es técnicamente óptima (25 puntos), una es parcialmente adecuada o con reservas (15 puntos) y una es incorrecta o riesgosa (5 puntos).
+4. Cada opción debe incluir retroalimentación pedagógica fundamentada en los conceptos exactos del gránulo.`;
+
+      const userPrompt = `Construye una actividad interactiva bajo la dinámica "${dinamica}" utilizando estrictamente esta información del docente:
+- Asignatura: ${asignatura}
+- Unidad / Semana: ${unidad}
+- Título del Gránulo Temático: ${titulo}
+- Resultado de Aprendizaje: ${objetivo}
+- Contenido Clave / Conceptos del Gránulo:
+${contenido}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: userPrompt }] }],
+        systemInstruction: { parts: [{ text: systemInstruction }] },
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              tituloReto: { type: "STRING" },
+              rolEstudiante: { type: "STRING", description: "Rol profesional o disciplinar específico de la materia (ej. Médico Residente, Juez de Control, Arquitecto de Software)" },
+              contextoCaso: { type: "STRING", description: "Escenario realista y técnico contextualizado en la disciplina del docente" },
+              fichaDocente: {
+                type: "OBJECT",
+                properties: {
+                  situacion: { type: "STRING" },
+                  mision: { type: "STRING" },
+                  instrucciones: { type: "ARRAY", items: { type: "STRING" } },
+                  productoEsperado: { type: "STRING" },
+                  justificacionRubrica: { type: "STRING" }
+                },
+                required: ["situacion", "mision", "instrucciones", "productoEsperado", "justificacionRubrica"]
+              },
+              etapas: {
+                type: "ARRAY",
+                items: {
+                  type: "OBJECT",
+                  properties: {
+                    numero: { type: "INTEGER" },
+                    tituloEtapa: { type: "STRING" },
+                    escenarioPregunta: { type: "STRING" },
+                    opciones: {
+                      type: "ARRAY",
+                      items: {
+                        type: "OBJECT",
+                        properties: {
+                          id: { type: "STRING" },
+                          texto: { type: "STRING" },
+                          puntaje: { type: "INTEGER" },
+                          nivelImpacto: { type: "STRING", description: "Ej: Decisión Óptima, Decisión Parcial, Decisión Riesgosa / Incorrecta" },
+                          retroalimentacion: { type: "STRING" }
+                        },
+                        required: ["id", "texto", "puntaje", "nivelImpacto", "retroalimentacion"]
+                      }
+                    }
+                  },
+                  required: ["numero", "tituloEtapa", "escenarioPregunta", "opciones"]
+                }
+              }
+            },
+            required: ["tituloReto", "rolEstudiante", "contextoCaso", "fichaDocente", "etapas"]
+          }
+        }
+      };
+
+      const maxIntentos = 4;
+      let retraso = 1000;
+
+      for (let intento = 0; intento < maxIntentos; intento++) {
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+          const textoJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+          if (!textoJson) {
+            throw new Error("Respuesta vacía del servicio.");
+          }
+
+          const actividadParsed = JSON.parse(textoJson);
+
+          estado.metadatos = { asignatura, unidad, titulo, dinamica, objetivo };
+          estado.actividad = actividadParsed;
+
+          renderizarFichaDocente();
+          reiniciarSimulador();
+          habilitarPestanasSecundarias();
+          setEstadoCarga(false);
+          cambiarVista('estudiante');
+          mostrarNotificacion("¡Simulador y ficha pedagógica generados con éxito!", "exito");
+          return;
+
+        } catch (err) {
+          if (intento === maxIntentos - 1) {
+            setEstadoCarga(false);
+            errorText.textContent = "Ocurrió un inconveniente al conectar con el motor de generación. Por favor intenta nuevamente en unos segundos.";
+            errorBox.classList.remove('hidden');
+          } else {
+            await new Promise(resolve => setTimeout(resolve, retraso));
+            retraso *= 2;
+          }
+        }
+      }
+    }
+
+    function setEstadoCarga(cargando) {
+      const btn = document.getElementById('btn-generar');
+      const iconSparkle = document.getElementById('icon-sparkle');
+      const iconSpinner = document.getElementById('icon-spinner');
+      const texto = document.getElementById('btn-generar-texto');
+
+      btn.disabled = cargando;
+      if (cargando) {
+        iconSparkle.classList.add('hidden');
+        iconSpinner.classList.remove('hidden');
+        texto.textContent = "Construyendo simulador disciplinar y ficha...";
+      } else {
+        iconSparkle.classList.remove('hidden');
+        iconSpinner.classList.add('hidden');
+        texto.textContent = "Generar Actividad Interactiva y Ficha Docente";
+      }
+    }
+
+    // =========================================================================
+    // MOTOR DEL SIMULADOR INTERACTIVO (VISTA DEL ESTUDIANTE)
+    // =========================================================================
+    function reiniciarSimulador() {
+      if (!estado.actividad || !estado.metadatos) return;
+
+      estado.etapaActual = 0;
+      estado.opcionSeleccionada = null;
+      estado.historial = [];
+
+      document.getElementById('est-badge-asignatura').textContent = `${estado.metadatos.asignatura} • ${estado.metadatos.unidad}`;
+      document.getElementById('est-badge-dinamica').textContent = estado.metadatos.dinamica;
+      document.getElementById('est-rol').textContent = `Rol: ${estado.actividad.rolEstudiante}`;
+      document.getElementById('est-titulo').textContent = estado.actividad.tituloReto;
+      document.getElementById('est-contexto').textContent = estado.actividad.contextoCaso;
+
+      document.getElementById('zona-juego-activa').classList.remove('hidden');
+      document.getElementById('zona-juego-resultados').classList.add('hidden');
+
+      renderizarEtapaActual();
+    }
+
+    function renderizarEtapaActual() {
+      const etapas = estado.actividad.etapas;
+      const idx = estado.etapaActual;
+      const etapa = etapas[idx];
+      const puntajeAcumulado = estado.historial.reduce((sum, item) => sum + item.puntaje, 0);
+
+      document.getElementById('juego-progreso-texto').textContent = `Etapa ${idx + 1} de ${etapas.length}`;
+      document.getElementById('juego-puntaje-texto').textContent = `Puntaje acumulado: ${puntajeAcumulado} pts`;
+      document.getElementById('juego-barra-progreso').style.width = `${((idx + 1) / etapas.length) * 100}%`;
+
+      document.getElementById('etapa-subtitulo').textContent = etapa.tituloEtapa;
+      document.getElementById('etapa-pregunta').textContent = etapa.escenarioPregunta;
+
+      const contOpciones = document.getElementById('etapa-opciones');
+      contOpciones.innerHTML = '';
+
+      etapa.opciones.forEach((op, i) => {
+        const letra = String.fromCharCode(65 + i);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'opcion-btn w-full text-left p-4 sm:p-5 rounded-xl border-2 border-slate-200 hover:border-indigo-400 hover:bg-slate-50 transition-all flex items-start gap-4 cursor-pointer';
+        btn.innerHTML = `
+          <span class="opcion-letra w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-bold text-sm flex items-center justify-center shrink-0 mt-0.5 transition">
+            ${letra}
+          </span>
+          <span class="font-medium text-slate-800 text-sm sm:text-base leading-relaxed">${op.texto}</span>
+        `;
+        btn.onclick = () => seleccionarOpcion(op, btn);
+        contOpciones.appendChild(btn);
+      });
+
+      document.getElementById('etapa-feedback').classList.add('hidden');
+      const btnNext = document.getElementById('btn-siguiente-etapa');
+      btnNext.disabled = true;
+      document.getElementById('btn-siguiente-texto').textContent =
+        idx + 1 < etapas.length ? 'Confirmar y Avanzar a Siguiente Etapa' : 'Finalizar Simulación y Ver Diagnóstico';
+    }
+
+    function seleccionarOpcion(opcion, botonSeleccionado) {
+      estado.opcionSeleccionada = opcion;
+
+      // Actualizar estilos visuales de los botones
+      document.querySelectorAll('.opcion-btn').forEach(btn => {
+        btn.classList.remove('border-indigo-600', 'bg-indigo-50/60', 'shadow-xs');
+        btn.classList.add('border-slate-200');
+        const badge = btn.querySelector('.opcion-letra');
+        badge.classList.remove('bg-indigo-600', 'text-white');
+        badge.classList.add('bg-slate-100', 'text-slate-700');
+      });
+
+      botonSeleccionado.classList.remove('border-slate-200');
+      botonSeleccionado.classList.add('border-indigo-600', 'bg-indigo-50/60', 'shadow-xs');
+      const badgeSel = botonSeleccionado.querySelector('.opcion-letra');
+      badgeSel.classList.remove('bg-slate-100', 'text-slate-700');
+      badgeSel.classList.add('bg-indigo-600', 'text-white');
+
+      // Mostrar retroalimentación inmediata
+      const fbBox = document.getElementById('etapa-feedback');
+      const fbNivel = document.getElementById('feedback-nivel');
+      const fbPuntos = document.getElementById('feedback-puntos');
+      const fbTexto = document.getElementById('feedback-texto');
+
+      fbBox.className = 'p-5 rounded-xl border mb-6 fade-in ';
+      if (opcion.puntaje >= 25) {
+        fbBox.className += 'bg-emerald-50 border-emerald-200 text-emerald-950';
+      } else if (opcion.puntaje >= 15) {
+        fbBox.className += 'bg-amber-50 border-amber-200 text-amber-950';
+      } else {
+        fbBox.className += 'bg-rose-50 border-rose-200 text-rose-950';
+      }
+
+      fbNivel.textContent = `Evaluación: ${opcion.nivelImpacto}`;
+      fbPuntos.textContent = `+${opcion.puntaje} pts`;
+      fbTexto.textContent = opcion.retroalimentacion;
+      fbBox.classList.remove('hidden');
+
+      document.getElementById('btn-siguiente-etapa').disabled = false;
+    }
+
+    function avanzarEtapa() {
+      if (!estado.opcionSeleccionada) return;
+
+      const etapa = estado.actividad.etapas[estado.etapaActual];
+      estado.historial.push({
+        etapa: etapa.tituloEtapa,
+        decision: estado.opcionSeleccionada.texto,
+        puntaje: estado.opcionSeleccionada.puntaje,
+        nivelImpacto: estado.opcionSeleccionada.nivelImpacto,
+        retroalimentacion: estado.opcionSeleccionada.retroalimentacion
+      });
+
+      estado.opcionSeleccionada = null;
+
+      if (estado.etapaActual + 1 < estado.actividad.etapas.length) {
+        estado.etapaActual++;
+        renderizarEtapaActual();
+      } else {
+        mostrarResultadosFinales();
+      }
+    }
+
+    function mostrarResultadosFinales() {
+      document.getElementById('zona-juego-activa').classList.add('hidden');
+      document.getElementById('zona-juego-resultados').classList.remove('hidden');
+
+      const total = estado.historial.reduce((acc, item) => acc + item.puntaje, 0);
+      const max = estado.actividad.etapas.length * 25;
+      const pct = (total / max) * 100;
+
+      const iconBox = document.getElementById('res-icono-box');
+      const badge = document.getElementById('res-nivel-badge');
+      const mensaje = document.getElementById('res-mensaje-final');
+
+      if (pct >= 85) {
+        iconBox.className = 'w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-emerald-100 text-emerald-700';
+        badge.className = 'inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2 bg-emerald-600 text-white';
+        badge.textContent = 'Desempeño Sobresaliente';
+        mensaje.textContent = 'Has aplicado con rigor técnico los conceptos del gránulo temático, tomando decisiones fundamentadas y resolviendo eficazmente cada etapa del desafío.';
+      } else if (pct >= 60) {
+        iconBox.className = 'w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-amber-100 text-amber-700';
+        badge.className = 'inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2 bg-amber-500 text-white';
+        badge.textContent = 'Desempeño Satisfactorio / En Desarrollo';
+        mensaje.textContent = 'Comprendes los principios generales del tema, aunque algunas decisiones presentaron vacíos conceptuales o riesgos que conviene revisar.';
+      } else {
+        iconBox.className = 'w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-rose-100 text-rose-700';
+        badge.className = 'inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2 bg-rose-600 text-white';
+        badge.textContent = 'Requiere Refuerzo Conceptual';
+        mensaje.textContent = 'Las decisiones tomadas evidencian dificultades en la aplicación de los conceptos clave de la semana. Revisa la bitácora inferior e inténtalo de nuevo.';
+      }
+
+      document.getElementById('res-puntaje-final').textContent = `Calificación Obtenida: ${total} / ${max} pts`;
+
+      const bitacora = document.getElementById('res-bitacora');
+      bitacora.innerHTML = '';
+
+      estado.historial.forEach((item, idx) => {
+        const badgeColor = item.puntaje >= 25
+          ? 'bg-emerald-100 text-emerald-800'
+          : item.puntaje >= 15
+          ? 'bg-amber-100 text-amber-800'
+          : 'bg-rose-100 text-rose-800';
+
+        const card = document.createElement('div');
+        card.className = 'p-4 rounded-xl bg-slate-50 border border-slate-200';
+        card.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+            <span class="text-xs font-bold text-slate-500 uppercase">Etapa ${idx + 1}: ${item.etapa}</span>
+            <span class="text-xs font-bold px-2.5 py-0.5 rounded-md ${badgeColor}">${item.nivelImpacto} (+${item.puntaje} pts)</span>
+          </div>
+          <p class="font-semibold text-slate-900 text-sm mb-1">Selección: "${item.decision}"</p>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${item.retroalimentacion}</p>
+        `;
+        bitacora.appendChild(card);
+      });
+    }
+
+    function exportarEvidenciaEstudiante() {
+      if (!estado.actividad || estado.historial.length === 0) return;
+      const total = estado.historial.reduce((acc, item) => acc + item.puntaje, 0);
+      const max = estado.actividad.etapas.length * 25;
+
+      const contenido = [
+        `EVIDENCIA DE SIMULACIÓN ACADÉMICA`,
+        `====================================================================`,
+        `Asignatura: ${estado.metadatos.asignatura} (${estado.metadatos.unidad})`,
+        `Gránulo Temático: ${estado.metadatos.titulo}`,
+        `Actividad: ${estado.actividad.tituloReto}`,
+        `Rol Asumido: ${estado.actividad.rolEstudiante}`,
+        `Puntaje Total: ${total} / ${max} puntos`,
+        `Fecha de realización: ${new Date().toLocaleString()}`,
+        `====================================================================\n`,
+        ...estado.historial.map((h, i) =>
+          `ETAPA ${i + 1}: ${h.etapa}\n- Decisión: ${h.decision}\n- Valoración: ${h.nivelImpacto} (+${h.puntaje} pts)\n- Retroalimentación: ${h.retroalimentacion}\n`
+        )
+      ].join('\n');
+
+      descargarArchivo(contenido, `Evidencia_${estado.metadatos.titulo.replace(/[^a-zA-Z0-9]/g, '_')}.txt`, 'text/plain;charset=utf-8');
+      mostrarNotificacion("Evidencia del estudiante descargada.", "exito");
+    }
+
+    // =========================================================================
+    // VISTA 3: FICHA DOCENTE Y EXPORTACIÓN DE JUEGO HTML INDEPENDIENTE
+    // =========================================================================
+    function renderizarFichaDocente() {
+      const f = estado.actividad.fichaDocente;
+      const m = estado.metadatos;
+
+      document.getElementById('ficha-titulo-reto').textContent = estado.actividad.tituloReto;
+      document.getElementById('ficha-meta').textContent = `${m.asignatura} • ${m.unidad} • Gránulo: ${m.titulo}`;
+      document.getElementById('ficha-situacion').textContent = f.situacion;
+      document.getElementById('ficha-mision').textContent = f.mision;
+
+      const ol = document.getElementById('ficha-instrucciones');
+      ol.innerHTML = '';
+      f.instrucciones.forEach(inst => {
+        const li = document.createElement('li');
+        li.textContent = inst;
+        ol.appendChild(li);
+      });
+
+      document.getElementById('ficha-producto').textContent = f.productoEsperado;
+      document.getElementById('ficha-justificacion').textContent = f.justificacionRubrica;
+    }
+
+    function construirTextoFicha() {
+      const f = estado.actividad.fichaDocente;
+      const m = estado.metadatos;
+      return `====================================================================
+GUÍA DE RETO INTERACTIVO - ${m.asignatura.toUpperCase()}
+====================================================================
+UNIDAD / SEMANA: ${m.unidad}
+GRÁNULO TEMÁTICO: ${m.titulo}
+DINÁMICA PEDAGÓGICA: ${m.dinamica}
+TÍTULO DEL RETO: ${estado.actividad.tituloReto}
+ROL DEL ESTUDIANTE: ${estado.actividad.rolEstudiante}
+
+1. SITUACIÓN / CONTEXTO:
+${f.situacion}
+
+2. MISIÓN / DESAFÍO:
+${f.mision}
+
+3. INSTRUCCIONES DE DESARROLLO:
+${f.instrucciones.map((inst, i) => `${i + 1}. ${inst}`).join('\n')}
+
+4. PRODUCTO ESPERADO:
+${f.productoEsperado}
+
+5. JUSTIFICACIÓN Y CRITERIOS DE RÚBRICA:
+${f.justificacionRubrica}
+====================================================================`;
+    }
+
+    function copiarFichaPortapapeles() {
+      const texto = construirTextoFicha();
+      const area = document.createElement('textarea');
+      area.value = texto;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      document.body.removeChild(area);
+      mostrarNotificacion("Ficha pedagógica copiada al portapapeles.", "exito");
+    }
+
+    // Genera un archivo HTML 100% autónomo con el juego embebido para subir a Moodle/Canvas/GitHub
+    function descargarHtmlStandalone() {
+      if (!estado.actividad || !estado.metadatos) return;
+
+      const datosEmbebidos = JSON.stringify({
+        metadatos: estado.metadatos,
+        actividad: estado.actividad
+      });
+
+      const htmlAutonomo = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${estado.actividad.tituloReto} - ${estado.metadatos.asignatura}</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto">
+    <div class="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-md mb-6 border-b-4 border-emerald-500">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">${estado.metadatos.asignatura} • ${estado.metadatos.unidad}</span>
+        <span class="text-xs font-semibold text-emerald-400 bg-slate-800 px-3 py-1 rounded-lg border border-slate-700">Rol: ${estado.actividad.rolEstudiante}</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold mb-4">${estado.actividad.tituloReto}</h1>
+      <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4 text-sm sm:text-base text-slate-200 leading-relaxed">
+        <strong class="text-emerald-400 block text-xs uppercase tracking-wider mb-1">Contexto del Caso</strong>
+        ${estado.actividad.contextoCaso}
+      </div>
+    </div>
+
+    <div id="app-juego" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8"></div>
+  </div>
+
+  <script>
+    const DATA = ${datosEmbebidos};
+    let paso = 0;
+    let seleccion = null;
+    let historial = [];
+
+    function render() {
+      const cont = document.getElementById('app-juego');
+      const etapas = DATA.actividad.etapas;
+
+      if (paso >= etapas.length) {
+        const total = historial.reduce((a, b) => a + b.puntaje, 0);
+        const max = etapas.length * 25;
+        const pct = (total / max) * 100;
+        const nivel = pct >= 85 ? 'Desempeño Sobresaliente' : pct >= 60 ? 'Desempeño Satisfactorio' : 'Requiere Refuerzo Conceptual';
+        const color = pct >= 85 ? 'bg-emerald-600' : pct >= 60 ? 'bg-amber-500' : 'bg-rose-600';
+
+        cont.innerHTML = \`
+          <div class="text-center pb-6 mb-6 border-b border-slate-100">
+            <span class="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full text-white \${color} mb-2">\${nivel}</span>
+            <h2 class="text-3xl font-extrabold text-slate-900">Puntaje Final: \${total} / \${max} pts</h2>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-4">Bitácora de Decisiones</h3>
+          <div class="space-y-3 mb-6">
+            \${historial.map((h, i) => \`
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="flex justify-between text-xs font-bold text-slate-500 mb-1">
+                  <span>ETAPA \${i + 1}: \${h.etapa}</span>
+                  <span>\${h.nivelImpacto} (+\${h.puntaje} pts)</span>
+                </div>
+                <p class="font-semibold text-sm text-slate-900 mb-1">"\${h.decision}"</p>
+                <p class="text-xs sm:text-sm text-slate-600">\${h.retroalimentacion}</p>
+              </div>
+            \`).join('')}
+          </div>
+          <button onclick="reiniciar()" class="bg-slate-900 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl text-sm cursor-pointer">
+            Volver a Intentar
+          </button>
+        \`;
+        return;
+      }
+
+      const etapa = etapas[paso];
+      const pts = historial.reduce((a, b) => a + b.puntaje, 0);
+
+      cont.innerHTML = \`
+        <div class="flex justify-between text-xs font-bold text-slate-500 uppercase mb-2">
+          <span>Etapa \${paso + 1} de \${etapas.length}</span>
+          <span class="text-indigo-700">Puntaje: \${pts} pts</span>
+        </div>
+        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-6">
+          <div class="bg-emerald-500 h-full" style="width: \${((paso + 1) / etapas.length) * 100}%"></div>
+        </div>
+        <span class="inline-block text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md mb-2">\${etapa.tituloEtapa}</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-5">\${etapa.escenarioPregunta}</h2>
+        <div class="space-y-3 mb-6">
+          \${etapa.opciones.map((op, i) => \`
+            <button onclick="elegir(\${i})" class="w-full text-left p-4 rounded-xl border-2 transition flex items-start gap-3 cursor-pointer \${seleccion === i ? 'border-indigo-600 bg-indigo-50/60' : 'border-slate-200 hover:border-slate-300'}">
+              <span class="w-7 h-7 rounded-full font-bold text-sm flex items-center justify-center shrink-0 \${seleccion === i ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700'}">\${String.fromCharCode(65 + i)}</span>
+              <span class="text-sm sm:text-base font-medium text-slate-800">\${op.texto}</span>
+            </button>
+          \`).join('')}
+        </div>
+        \${seleccion !== null ? \`
+          <div class="p-4 rounded-xl border mb-6 \${etapa.opciones[seleccion].puntaje >= 25 ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : etapa.opciones[seleccion].puntaje >= 15 ? 'bg-amber-50 border-amber-200 text-amber-950' : 'bg-rose-50 border-rose-200 text-rose-950'}">
+            <div class="flex justify-between font-bold text-sm mb-1">
+              <span>\${etapa.opciones[seleccion].nivelImpacto}</span>
+              <span>+\${etapa.opciones[seleccion].puntaje} pts</span>
+            </div>
+            <p class="text-sm">\${etapa.opciones[seleccion].retroalimentacion}</p>
+          </div>
+        \` : ''}
+        <div class="flex justify-end">
+          <button onclick="siguiente()" \${seleccion === null ? 'disabled' : ''} class="bg-slate-900 hover:bg-indigo-700 disabled:bg-slate-300 text-white font-bold py-3 px-6 rounded-xl text-sm cursor-pointer disabled:cursor-not-allowed">
+            \${paso + 1 < etapas.length ? 'Confirmar y Continuar' : 'Ver Resultados Finales'}
+          </button>
+        </div>
+      \`;
+    }
+
+    function elegir(i) { seleccion = i; render(); }
+    function siguiente() {
+      if (seleccion === null) return;
+      const etapa = DATA.actividad.etapas[paso];
+      const op = etapa.opciones[seleccion];
+      historial.push({ etapa: etapa.tituloEtapa, decision: op.texto, puntaje: op.puntaje, nivelImpacto: op.nivelImpacto, retroalimentacion: op.retroalimentacion });
+      seleccion = null;
+      paso++;
+      render();
+    }
+    function reiniciar() { paso = 0; seleccion = null; historial = []; render(); }
+    render();
+  <\/script>
+</body>
+</html>`;
+
+      const nombreArchivo = `Simulador_${estado.metadatos.titulo.replace(/[^a-zA-Z0-9]/g, '_')}.html`;
+      descargarArchivo(htmlAutonomo, nombreArchivo, 'text/html;charset=utf-8');
+      mostrarNotificacion("Archivo HTML independiente del simulador descargado.", "exito");
+    }
+
+    function descargarArchivo(contenido, nombreArchivo, mimeType) {
+      const blob = new Blob([contenido], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = nombreArchivo;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
