@@ -13,7 +13,7 @@
       font-family: 'Inter', sans-serif;
     }
     .fade-in {
-      animation: fadeIn 0.25s ease-in-out;
+      animation: fadeIn 0.25s ease-out;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
@@ -23,53 +23,59 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-  <!-- BARRA SUPERIOR INSTITUCIONAL -->
+  <!-- ENCABEZADO INSTITUCIONAL -->
   <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-inner shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-inner">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
         </div>
         <div>
-          <h1 class="text-base sm:text-lg font-extrabold tracking-tight leading-tight">
-            Generador Universal de Retos y Simuladores Académicos
-          </h1>
-          <p class="text-xs text-slate-400">
-            Motor multidisciplinario para convertir cualquier gránulo temático en experiencias interactivas
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-base sm:text-lg font-extrabold tracking-tight leading-tight">
+              Generador Universal de Retos y Simuladores Académicos
+            </h1>
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              100% Autónomo • Sin API Key • Multidisciplinario
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Motor pedagógico local para transformar cualquier gránulo temático en simuladores y fichas de reto
           </p>
         </div>
       </div>
 
       <!-- NAVEGACIÓN DE PESTAÑAS -->
-      <nav class="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700 self-start md:self-auto">
+      <nav class="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700 self-start lg:self-auto">
         <button id="tab-btn-docente" onclick="cambiarVista('docente')"
-          class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm">
-          <span>1. Gránulo Temático</span>
+          class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm cursor-pointer">
+          <span>1. Gránulo Docente</span>
         </button>
 
         <button id="tab-btn-estudiante" onclick="cambiarVista('estudiante')" disabled
           class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-400 opacity-50 cursor-not-allowed">
-          <span>2. Simulador Interactivo</span>
+          <span>2. Simulador Jugable</span>
         </button>
 
         <button id="tab-btn-ficha" onclick="cambiarVista('ficha')" disabled
           class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-400 opacity-50 cursor-not-allowed">
-          <span>3. Ficha y Exportación</span>
+          <span>3. Ficha Docente y Exportación</span>
         </button>
       </nav>
     </div>
   </header>
 
-  <!-- CONTENEDOR DE MENSAJES DE NOTIFICACIÓN (SIN ALERT) -->
+  <!-- CONTENEDOR DE NOTIFICACIONES -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     <!-- =================================================================== -->
-    <!-- VISTA 1: GRÁNULO TEMÁTICO (ENTRADA DEL DOCENTE - 100% EN BLANCO)    -->
+    <!-- VISTA 1: GRÁNULO DOCENTE                                            -->
     <!-- =================================================================== -->
     <section id="vista-docente" class="fade-in grid grid-cols-1 lg:grid-cols-12 gap-8">
       
@@ -78,41 +84,43 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-6 border-b border-slate-100">
           <div>
             <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md mb-1.5">
-              Diseño Instruccional Agnóstico
+              Diseño Instruccional Local
             </span>
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Ingresar Gránulo de la Semana</h2>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Configurar Gránulo Semanal</h2>
           </div>
 
-          <div class="flex items-center gap-2">
-            <button type="button" onclick="limpiarFormulario()"
-              class="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition">
-              Limpiar campos
-            </button>
-          </div>
+          <button type="button" onclick="limpiarFormulario()"
+            class="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition self-start sm:self-auto cursor-pointer">
+            Limpiar campos
+          </button>
         </div>
 
-        <!-- Barra de Ejemplos Multidisciplinarios Opcionales -->
-        <div class="mb-6 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-wrap items-center justify-between gap-2">
-          <span class="text-xs font-semibold text-slate-600">
-            ¿Deseas probar la versatilidad? Cargar muestra de otra facultad:
+        <!-- Muestras Rápidas Multidisciplinarias -->
+        <div class="mb-6 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+          <span class="block text-xs font-semibold text-slate-600 mb-2.5">
+            ¿Deseas probar la versatilidad? Cargar muestra rápida de ejemplo:
           </span>
           <div class="flex flex-wrap gap-2">
             <button type="button" onclick="cargarMuestra('salud')"
-              class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-emerald-500 hover:text-emerald-700 transition shadow-2xs">
+              class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-emerald-500 hover:text-emerald-700 transition cursor-pointer">
               + Salud / Enfermería
             </button>
             <button type="button" onclick="cargarMuestra('derecho')"
-              class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 hover:text-indigo-700 transition shadow-2xs">
+              class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 hover:text-indigo-700 transition cursor-pointer">
               + Derecho Penal
             </button>
             <button type="button" onclick="cargarMuestra('ingenieria')"
-              class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-sky-500 hover:text-sky-700 transition shadow-2xs">
+              class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-sky-500 hover:text-sky-700 transition cursor-pointer">
               + Ingeniería / Software
+            </button>
+            <button type="button" onclick="cargarMuestra('entornos')"
+              class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-amber-500 hover:text-amber-700 transition cursor-pointer">
+              + Entornos Organizacionales (PESTEL)
             </button>
           </div>
         </div>
 
-        <!-- Alerta de Validación / Error -->
+        <!-- Caja de Validación -->
         <div id="error-box" class="hidden mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-start gap-3">
           <svg class="w-5 h-5 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -120,7 +128,7 @@
           <p id="error-text"></p>
         </div>
 
-        <form id="form-granulo" onsubmit="generarActividad(event)" class="space-y-5">
+        <form id="form-granulo" onsubmit="procesarGranulo(event)" novalidate class="space-y-5">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="sm:col-span-2">
               <label for="input-asignatura" class="block text-sm font-semibold text-slate-700 mb-1.5">
@@ -147,7 +155,7 @@
                 Título del Gránulo Temático *
               </label>
               <input id="input-titulo" type="text" required
-                placeholder="Ej: Tipicidad y Antijuridicidad / Mitosis y Meiosis / Derivadas Parciales"
+                placeholder="Ej: Análisis del Macroentorno / Protocolo de Sepsis"
                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition" />
             </div>
 
@@ -157,10 +165,10 @@
               </label>
               <select id="input-dinamica"
                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm font-medium text-slate-800 transition">
-                <option value="Simulador de Toma de Decisiones (Caso aplicado en 4 etapas)">1. Simulador de Toma de Decisiones (Caso en 4 etapas)</option>
-                <option value="Juego de Roles / Resolución de Crisis Profesional">2. Juego de Roles / Resolución de Crisis Profesional</option>
-                <option value="Trivia Gamificada de Diagnóstico y Conceptos">3. Trivia Gamificada de Diagnóstico y Conceptos</option>
-                <option value="Clasificador de Matrices / Análisis Crítico">4. Clasificador de Matrices / Análisis Crítico</option>
+                <option value="1. Simulador de Toma de Decisiones (Caso en 4 etapas)">1. Simulador de Toma de Decisiones (Caso en 4 etapas)</option>
+                <option value="2. Juego de Roles y Gestión de Crisis">2. Juego de Roles y Gestión de Crisis</option>
+                <option value="3. Trivia Estratégica Gamificada">3. Trivia Estratégica Gamificada</option>
+                <option value="4. Matriz de Clasificación y Diagnóstico Cualitativo">4. Matriz de Clasificación y Diagnóstico Cualitativo</option>
               </select>
             </div>
           </div>
@@ -170,80 +178,84 @@
               Resultado de Aprendizaje (Objetivo) *
             </label>
             <input id="input-objetivo" type="text" required
-              placeholder="Ej: Diagnosticar fallas estructurales aplicando los criterios normativos estudiados en clase..."
+              placeholder="Ej: Evaluar variables críticas del entorno para formular estrategias de mitigación..."
               class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition" />
           </div>
 
           <div>
-            <div class="flex items-center justify-between mb-1.5">
+            <div class="flex flex-wrap items-center justify-between gap-1 mb-1.5">
               <label for="input-contenido" class="block text-sm font-semibold text-slate-700">
                 Contenido Clave / Conceptos del Gránulo *
               </label>
-              <span class="text-xs text-slate-400">Base conceptual estricta para la actividad</span>
+              <span class="text-xs text-slate-500">Usa viñetas o formato "Concepto: definición" para mayor precisión</span>
             </div>
             <textarea id="input-contenido" rows="6" required
-              placeholder="Pega aquí el resumen teórico, definiciones, fórmulas, protocolos, artículos legales o lecturas clave de la semana. El simulador se construirá 100% sobre este contenido..."
+              placeholder="Pega aquí las viñetas, conceptos clave, definiciones o criterios de la semana. Ejemplo:
+• Concepto 1: Explicación breve del criterio o variable.
+• Concepto 2: Explicación breve del criterio o variable.
+• Concepto 3: Explicación breve del criterio o variable."
               class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm leading-relaxed transition"></textarea>
           </div>
 
           <div class="pt-2">
-            <button id="btn-generar" type="submit"
+            <button type="submit"
               class="w-full bg-slate-900 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition-all flex items-center justify-center gap-2.5 text-sm sm:text-base cursor-pointer">
-              <svg id="icon-sparkle" class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
-              <svg id="icon-spinner" class="hidden w-5 h-5 animate-spin text-emerald-400" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-              </svg>
-              <span id="btn-generar-texto">Generar Actividad Interactiva y Ficha Docente</span>
+              <span>Generar Simulador Interactivo y Ficha Pedagógica</span>
             </button>
           </div>
         </form>
       </div>
 
-      <!-- Columna Lateral Informativa -->
+      <!-- Panel Lateral Informativo -->
       <aside class="lg:col-span-4 space-y-6">
         <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-sm border border-slate-800">
-          <h3 class="text-base font-bold text-emerald-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <h3 class="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-4 flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
-            Arquitectura Pedagógica
+            Motor Autónomo Garantizado
           </h3>
           <div class="space-y-4 text-sm text-slate-300">
             <div class="flex gap-3">
-              <span class="w-6 h-6 rounded-full bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">1</span>
-              <p><strong class="text-white">Cero sesgo disciplinar:</strong> El motor adapta el vocabulario técnico, el rol profesional y los dilemas exclusivamente a la materia ingresada.</p>
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold flex items-center justify-center shrink-0 text-xs">1</span>
+              <p><strong class="text-white">Sin errores de red:</strong> Procesamiento heurístico instantáneo ejecutado 100% en tu navegador, sin servidores externos.</p>
             </div>
             <div class="flex gap-3">
-              <span class="w-6 h-6 rounded-full bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">2</span>
-              <p><strong class="text-white">4 Etapas Secuenciales:</strong> Cada desafío evalúa criterios específicos del gránulo con retroalimentación formativa inmediata.</p>
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold flex items-center justify-center shrink-0 text-xs">2</span>
+              <p><strong class="text-white">Extracción conceptual:</strong> Detecta tus viñetas y definiciones para construir 4 etapas evaluativas coherentes.</p>
             </div>
             <div class="flex gap-3">
-              <span class="w-6 h-6 rounded-full bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">3</span>
-              <p><strong class="text-white">Exportación Autónoma:</strong> Descarga un archivo HTML jugable independiente para incrustar en Moodle, Canvas o GitHub Pages.</p>
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold flex items-center justify-center shrink-0 text-xs">3</span>
+              <p><strong class="text-white">Listo para LMS:</strong> Exporta un archivo HTML independiente jugable para subir a Moodle, Canvas o GitHub Pages.</p>
             </div>
           </div>
         </div>
 
         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
           <h4 class="font-bold text-slate-900 text-sm mb-2.5 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            Recomendación para el Gránulo
+            <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+            Cómo estructurar el contenido
           </h4>
-          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Para obtener escenarios de alta precisión técnica, incluye en el campo <strong>Contenido Clave</strong> los conceptos centrales, clasificaciones, criterios de decisión o errores frecuentes que los estudiantes suelen cometer en ese tema.
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
+            El motor extrae automáticamente cada concepto clave de tu texto. Para obtener los mejores reactivos:
           </p>
+          <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
+            <li>Separa cada concepto o factor en una línea o viñeta distinta.</li>
+            <li>Usa dos puntos (<strong>Término:</strong> explicación) cuando definas variables.</li>
+            <li>Incluye al menos 3 o 4 ideas centrales de la semana.</li>
+          </ul>
         </div>
       </aside>
     </section>
 
     <!-- =================================================================== -->
-    <!-- VISTA 2: SIMULADOR INTERACTIVO (VISTA DEL ESTUDIANTE)               -->
+    <!-- VISTA 2: SIMULADOR JUGABLE (VISTA DEL ESTUDIANTE)                   -->
     <!-- =================================================================== -->
     <section id="vista-estudiante" class="hidden fade-in max-w-4xl mx-auto">
-      <!-- Encabezado del Escenario -->
+      <!-- Cabecera del Reto -->
       <div class="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-md mb-6 border-b-4 border-emerald-500">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
           <div class="flex flex-wrap items-center gap-2">
@@ -257,24 +269,22 @@
 
         <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-4 sm:p-5">
           <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 block mb-1">
-            Contexto Profesional del Caso
+            Situación / Escenario de Aplicación
           </span>
           <p id="est-contexto" class="text-sm sm:text-base text-slate-200 leading-relaxed"></p>
         </div>
       </div>
 
-      <!-- Contenedor Dinámico del Juego (Etapa activa o Resultados finales) -->
+      <!-- Zona de Juego Activo -->
       <div id="zona-juego-activa" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
-        <!-- Barra de progreso -->
         <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
           <span id="juego-progreso-texto">Etapa 1 de 4</span>
-          <span id="juego-puntaje-texto" class="text-indigo-700">Puntaje: 0 pts</span>
+          <span id="juego-puntaje-texto" class="text-indigo-700">Puntaje acumulado: 0 pts</span>
         </div>
         <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-8">
           <div id="juego-barra-progreso" class="bg-emerald-500 h-full transition-all duration-500" style="width: 25%"></div>
         </div>
 
-        <!-- Pregunta y Opciones -->
         <div class="mb-6">
           <span id="etapa-subtitulo" class="inline-block text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md mb-2"></span>
           <h3 id="etapa-pregunta" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug"></h3>
@@ -282,7 +292,7 @@
 
         <div id="etapa-opciones" class="space-y-3.5 mb-6"></div>
 
-        <!-- Panel de Retroalimentación Inmediata -->
+        <!-- Retroalimentación Inmediata -->
         <div id="etapa-feedback" class="hidden p-5 rounded-xl border mb-6 transition-all">
           <div class="flex items-center justify-between mb-1.5">
             <span id="feedback-nivel" class="font-bold text-sm"></span>
@@ -302,7 +312,7 @@
         </div>
       </div>
 
-      <!-- Pantalla Final de Resultados -->
+      <!-- Pantalla Final de Diagnóstico -->
       <div id="zona-juego-resultados" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 fade-in">
         <div class="text-center pb-8 mb-8 border-b border-slate-100">
           <div id="res-icono-box" class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -315,7 +325,7 @@
           <p id="res-mensaje-final" class="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed mt-3"></p>
         </div>
 
-        <h4 class="font-bold text-slate-900 text-base sm:text-lg mb-4">Bitácora de Decisiones y Retroalimentación</h4>
+        <h4 class="font-bold text-slate-900 text-base sm:text-lg mb-4">Resumen de Decisiones y Retroalimentación</h4>
         <div id="res-bitacora" class="space-y-4 mb-8"></div>
 
         <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
@@ -339,24 +349,29 @@
     </section>
 
     <!-- =================================================================== -->
-    <!-- VISTA 3: FICHA PEDAGÓGICA Y EXPORTACIÓN (VISTA DEL DOCENTE)         -->
+    <!-- VISTA 3: FICHA DOCENTE Y EXPORTACIÓN                                -->
     <!-- =================================================================== -->
     <section id="vista-ficha" class="hidden fade-in max-w-5xl mx-auto">
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <!-- Cabecera de Ficha con Botones de Acción -->
+        <!-- Cabecera con Acciones de Exportación -->
         <div class="bg-slate-900 text-white p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">
-              Guía Instruccional Lista para LMS
+              Guía Instruccional Lista para Aula Virtual
             </span>
             <h2 id="ficha-titulo-reto" class="text-2xl font-bold mt-1"></h2>
             <p id="ficha-meta" class="text-sm text-slate-400 mt-1"></p>
           </div>
 
-          <div class="flex flex-wrap items-center gap-3">
+          <div class="flex flex-wrap items-center gap-2.5">
             <button onclick="copiarFichaPortapapeles()"
               class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold py-2.5 px-4 rounded-xl text-xs sm:text-sm transition cursor-pointer">
               Copiar Ficha al Portapapeles
+            </button>
+
+            <button onclick="descargarFichaTxt()"
+              class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold py-2.5 px-4 rounded-xl text-xs sm:text-sm transition cursor-pointer">
+              Descargar Ficha (.txt)
             </button>
 
             <button onclick="descargarHtmlStandalone()"
@@ -364,24 +379,24 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              <span>Descargar Juego HTML (.html)</span>
+              <span>Descargar Juego HTML Independiente (.html)</span>
             </button>
           </div>
         </div>
 
-        <!-- 5 Bloques Pedagógicos Estándar -->
+        <!-- 5 Bloques Pedagógicos -->
         <div class="p-6 sm:p-8 space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 border-l-4 border-l-slate-900">
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                1. Situación / Contexto
+                1. Situación / Problemática Real
               </h3>
               <p id="ficha-situacion" class="text-sm text-slate-800 leading-relaxed"></p>
             </div>
 
             <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 border-l-4 border-l-indigo-600">
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                2. Misión / Desafío
+                2. Misión / Desafío del Estudiante
               </h3>
               <p id="ficha-mision" class="text-sm text-slate-800 leading-relaxed"></p>
             </div>
@@ -389,7 +404,7 @@
 
           <div class="p-5 rounded-xl bg-slate-50 border border-slate-200">
             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
-              3. Instrucciones de Desarrollo
+              3. Instrucciones de Desarrollo Paso a Paso
             </h3>
             <ol id="ficha-instrucciones" class="list-decimal list-inside space-y-2 text-sm text-slate-800"></ol>
           </div>
@@ -404,17 +419,14 @@
 
             <div class="p-5 rounded-xl bg-slate-50 border border-slate-200">
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                5. Justificación y Criterios de Rúbrica
+                5. Justificación y Criterios de Evaluación (Rúbrica)
               </h3>
               <p id="ficha-justificacion" class="text-sm text-slate-800 leading-relaxed"></p>
             </div>
           </div>
 
-          <!-- Nota de uso para LMS -->
-          <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 text-xs sm:text-sm text-indigo-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <strong>¿Cómo publicar este simulador a tus estudiantes?</strong> Haz clic en <em>"Descargar Juego HTML (.html)"</em> y súbelo directamente como recurso en Moodle, Canvas, Brightspace o GitHub Pages. Funciona sin internet y sin claves API.
-            </div>
+          <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 text-xs sm:text-sm text-indigo-950">
+            <strong>Publicación directa en LMS:</strong> El archivo descargado mediante <em>"Descargar Juego HTML Independiente (.html)"</em> contiene el simulador completo embebido. Puedes subirlo directamente a Moodle, Canvas, Brightspace o Google Sites sin requerir conexión a servidores externos.
           </div>
         </div>
       </div>
@@ -425,37 +437,58 @@
   <footer class="border-t border-slate-200 bg-white py-4 mt-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
       <span>Generador Universal de Retos y Simuladores Académicos</span>
-      <span>Compatible con todas las áreas del conocimiento</span>
+      <span>Ejecución local autónoma • Compatible con todas las disciplinas</span>
     </div>
   </footer>
 
-  <!-- LÓGICA DE LA APLICACIÓN -->
+  <!-- MOTOR PEDAGÓGICO AUTÓNOMO (NLP HEURÍSTICO EN CLIENTE) -->
   <script>
-    // Muestras multidisciplinarias opcionales (no se cargan por defecto; el formulario inicia 100% vacío)
-    const MUESTRAS_DISCIPLINARES = {
+    // Muestras rápidas opcionales (el formulario arranca completamente vacío)
+    const MUESTRAS = {
       salud: {
         asignatura: "Enfermería en Urgencias y Cuidados Críticos",
         unidad: "Semana 5 - Unidad 2",
         titulo: "Protocolo de Triaje y Manejo Inicial de Sepsis",
-        dinamica: "Juego de Roles / Resolución de Crisis Profesional",
-        objetivo: "Priorizar intervenciones clínicas basadas en signos de alarma hemodinámica y aplicar el paquete de medidas de la primera hora (Hour-1 Bundle).",
-        contenido: "La sepsis es una disfunción orgánica potencialmente mortal causada por una respuesta desregulada del huésped a la infección. Criterios qSOFA: frecuencia respiratoria >= 22 rpm, alteración del estado mental (Glasgow < 15) y presión arterial sistólica <= 100 mmHg. El paquete de la primera hora exige: 1) Medir nivel de lactato sérico; 2) Obtener hemocultivos antes de administrar antibióticos; 3) Administrar antibióticos de amplio espectro por vía intravenosa; 4) Iniciar reanimación rápida con cristaloides (30 ml/kg) si hay hipotensión o lactato >= 4 mmol/L; 5) Aplicar vasopresores si persiste hipotensión durante o después de la reanimación hídrica para mantener PAM >= 65 mmHg."
+        dinamica: "2. Juego de Roles y Gestión de Crisis",
+        objetivo: "Priorizar intervenciones clínicas basadas en signos de alarma hemodinámica y aplicar el paquete de medidas de la primera hora.",
+        contenido: `• Criterios de alerta qSOFA: Frecuencia respiratoria >= 22 rpm, alteración del estado mental (Glasgow < 15) y presión arterial sistólica <= 100 mmHg.
+• Medición de lactato sérico: Evaluar hipoperfusión tisular oculta dentro de la primera hora de ingreso.
+• Toma de hemocultivos: Obtener cultivos microbiológicos antes de iniciar antimicrobianos sin retrasar el tratamiento más de 45 minutos.
+• Antibioticoterapia empírica: Administrar antibióticos intravenosos de amplio espectro de forma inmediata tras los cultivos.
+• Reanimación hídrica y vasopresores: Infundir cristaloides (30 ml/kg) ante hipotensión o lactato >= 4 mmol/L y sostener PAM >= 65 mmHg.`
       },
       derecho: {
         asignatura: "Derecho Penal General",
         unidad: "Unidad 3 - Semana 7",
-        titulo: "Teoría del Delito: Tipicidad, Antijuridicidad y Causales de Justificación",
-        dinamica: "Simulador de Toma de Decisiones (Caso aplicado en 4 etapas)",
-        objetivo: "Determinar la existencia de responsabilidad penal evaluando los elementos objetivos y subjetivos del tipo penal y la procedencia de la legítima defensa.",
-        contenido: "Para que una conducta sea punible se requiere que sea típica, antijurídica y culpable. La tipicidad exige adecuación exacta al supuesto de hecho legal (elementos objetivos, sujeto activo/pasivo, verbo rector) y elemento subjetivo (dolo, culpa o preterintención). La antijuridicidad implica lesión o puesta en peligro efectiva del bien jurídico sin justa causa. Causales de ausencia de responsabilidad (Art. 32 CP): legítima defensa (agresión actual o inminente, injusta, necesidad de defensa y proporcionalidad del medio empleado), estado de necesidad justificante y estricto cumplimiento de un deber legal. Si falta proporcionalidad, se configura exceso en la legítima defensa con atenuación punitiva."
+        titulo: "Teoría del Delito: Tipicidad, Antijuridicidad y Legítima Defensa",
+        dinamica: "1. Simulador de Toma de Decisiones (Caso en 4 etapas)",
+        objetivo: "Determinar la procedencia de responsabilidad penal evaluando los elementos del tipo penal y las causales de justificación.",
+        contenido: `• Tipicidad objetiva y subjetiva: Adecuación exacta de la conducta al supuesto de hecho legal, verificando verbo rector y modalidad (dolo, culpa o preterintención).
+• Antijuridicidad material: Lesión o puesta en peligro efectiva del bien jurídico tutelado sin que medie justa causa legal.
+• Legítima defensa (Art. 32 CP): Requiere agresión actual o inminente, injusta, necesidad de defensa y estricta proporcionalidad del medio empleado.
+• Exceso en la legítima defensa: Cuando existiendo agresión injusta se desborda la proporcionalidad de la respuesta, generando atenuación punitiva.`
       },
       ingenieria: {
         asignatura: "Arquitectura de Software y Sistemas Distribuidos",
         unidad: "Semana 6 - Módulo 3",
-        titulo: "Teorema CAP, Consistencia Eventual y Tolerancia a Particiones",
-        dinamica: "Clasificador de Matrices / Análisis Crítico",
-        objetivo: "Seleccionar estrategias de replicación y almacenamiento distribuido equilibrando disponibilidad y consistencia según los requisitos críticos del negocio.",
-        contenido: "El Teorema CAP establece que en un sistema distribuido de datos es imposible garantizar simultáneamente más de dos de las siguientes tres propiedades: Consistencia (Consistency: todos los nodos ven los mismos datos al mismo tiempo), Disponibilidad (Availability: cada solicitud recibe una respuesta sin garantía de que contenga la versión más reciente) y Tolerancia a Particiones (Partition Tolerance: el sistema sigue operando pese a pérdida o retraso de mensajes entre nodos). Ante una partición de red (P), el arquitecto debe elegir entre CP (prioriza consistencia rechazando escrituras/lecturas inseguras, ideal para transacciones bancarias) o AP (prioriza disponibilidad permitiendo lecturas eventualmente consistentes, ideal para carritos de compra o catálogos)."
+        titulo: "Teorema CAP y Estrategias de Replicación Distribuida",
+        dinamica: "4. Matriz de Clasificación y Diagnóstico Cualitativo",
+        objetivo: "Seleccionar arquitecturas de datos distribuidas equilibrando consistencia y disponibilidad ante particiones de red.",
+        contenido: `• Consistencia fuerte (Consistency): Garantiza que todos los nodos del clúster devuelvan el dato más reciente tras cada escritura confirmada.
+• Alta disponibilidad (Availability): Asegura que toda petición reciba una respuesta operativa sin errores, incluso si algún nodo tiene datos desactualizados.
+• Tolerancia a particiones (Partition Tolerance): Capacidad del sistema para continuar operando pese a pérdida o latencia extrema de mensajes entre nodos.
+• Elección CP vs AP: Ante una falla de red, los sistemas financieros priorizan CP (consistencia), mientras que catálogos o redes sociales priorizan AP (disponibilidad).`
+      },
+      entornos: {
+        asignatura: "Entornos Organizacionales",
+        unidad: "Semana 2 - Unidad 1",
+        titulo: "Análisis del Macroentorno con Matriz PESTEL y Fuerzas Sectoriales",
+        dinamica: "1. Simulador de Toma de Decisiones (Caso en 4 etapas)",
+        objetivo: "Identificar variables externas del macro y mesoentorno que afectan la sostenibilidad empresarial para formular respuestas estratégicas.",
+        contenido: `• Factor Político-Legal: Cambios regulatorios, reformas tributarias verdes y normativas sectoriales que exigen adaptación operativa inmediata.
+• Factor Económico: Inflación, tasas de interés y variaciones en costos de insumos que presionan los márgenes de rentabilidad.
+• Factor Tecnológico y Ecológico: Transición hacia energías limpias, economía circular y automatización de procesos productivos.
+• Actores del Mesoentorno: Gremios, proveedores estratégicos, distribuidores y competidores que condicionan el poder de negociación de la empresa.`
       }
     };
 
@@ -468,31 +501,31 @@
       historial: []
     };
 
-    // Utilidad para mostrar notificaciones no intrusivas (reemplaza alert)
+    // Notificación flotante no intrusiva
     function mostrarNotificacion(mensaje, tipo = 'info') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      const colores = tipo === 'exito'
+      const estilos = tipo === 'exito'
         ? 'bg-emerald-900 text-emerald-50 border-emerald-700'
         : tipo === 'error'
         ? 'bg-rose-900 text-rose-50 border-rose-700'
         : 'bg-slate-900 text-white border-slate-700';
 
-      toast.className = `pointer-events-auto px-4 py-3 rounded-xl border shadow-lg text-xs sm:text-sm font-medium fade-in ${colores}`;
+      toast.className = `pointer-events-auto px-4 py-3 rounded-xl border shadow-lg text-xs sm:text-sm font-medium fade-in ${estilos}`;
       toast.textContent = mensaje;
       container.appendChild(toast);
 
       setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s ease';
-        setTimeout(() => toast.remove(), 300);
+        toast.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => toast.remove(), 250);
       }, 3000);
     }
 
-    // Cambiar entre las 3 vistas principales
+    // Cambio de pestañas
     function cambiarVista(vista) {
       if ((vista === 'estudiante' || vista === 'ficha') && !estado.actividad) {
-        mostrarNotificacion("Primero genera una actividad desde la pestaña Gránulo Temático.", "error");
+        mostrarNotificacion("Primero completa el gránulo y genera la actividad.", "error");
         return;
       }
 
@@ -511,7 +544,6 @@
       });
     }
 
-    // Habilitar pestañas de estudiante y ficha tras generar actividad
     function habilitarPestanasSecundarias() {
       ['estudiante', 'ficha'].forEach(v => {
         const btn = document.getElementById(`tab-btn-${v}`);
@@ -521,9 +553,8 @@
       });
     }
 
-    // Cargar muestra opcional de otra facultad
     function cargarMuestra(clave) {
-      const m = MUESTRAS_DISCIPLINARES[clave];
+      const m = MUESTRAS[clave];
       if (!m) return;
       document.getElementById('input-asignatura').value = m.asignatura;
       document.getElementById('input-unidad').value = m.unidad;
@@ -532,18 +563,215 @@
       document.getElementById('input-objetivo').value = m.objetivo;
       document.getElementById('input-contenido').value = m.contenido;
       document.getElementById('error-box').classList.add('hidden');
-      mostrarNotificacion(`Muestra de ${m.asignatura} cargada en el formulario.`);
+      mostrarNotificacion(`Muestra de ${m.asignatura} cargada.`);
     }
 
-    // Limpiar todos los campos
     function limpiarFormulario() {
       document.getElementById('form-granulo').reset();
       document.getElementById('error-box').classList.add('hidden');
-      mostrarNotificacion("Campos del formulario limpios.");
+      mostrarNotificacion("Formulario limpio.");
     }
 
-    // Llamada a Gemini API para construir el simulador y la ficha pedagógica
-    async function generarActividad(event) {
+    // =========================================================================
+    // MOTOR NLP HEURÍSTICO EN CLIENTE (EXTRACTOR DE CONCEPTOS Y GENERADOR)
+    // =========================================================================
+    function extraerConceptosClave(textoBruto, tituloGranulo) {
+      // Limpiar y dividir por saltos de línea, viñetas o puntos seguidos
+      let bloques = textoBruto
+        .split(/\r?\n+/)
+        .map(l => l.replace(/^[\s•\-\*\d\.\)\]]+/, '').trim())
+        .filter(l => l.length > 8);
+
+      // Si el docente pegó un párrafo continuo sin saltos de línea, dividir por oraciones
+      if (bloques.length < 2) {
+        bloques = textoBruto
+          .split(/(?<=[.!?])\s+/)
+          .map(s => s.trim())
+          .filter(s => s.length > 12);
+      }
+
+      const conceptos = bloques.map((bloque, idx) => {
+        const idxDosPuntos = bloque.indexOf(':');
+        if (idxDosPuntos > 2 && idxDosPuntos < 70) {
+          const termino = bloque.slice(0, idxDosPuntos).trim();
+          const definicion = bloque.slice(idxDosPuntos + 1).trim();
+          return {
+            termino,
+            definicion: definicion || bloque
+          };
+        } else {
+          // Extraer primeras palabras como etiqueta del concepto
+          const palabras = bloque.split(/\s+/);
+          const termino = palabras.slice(0, Math.min(4, palabras.length)).join(' ').replace(/[.,;:]$/, '');
+          return {
+            termino: termino.length > 4 ? termino : `Criterio clave ${idx + 1}`,
+            definicion: bloque
+          };
+        }
+      });
+
+      // Garantizar al menos 4 conceptos estructurados para las 4 etapas
+      const baseRespaldo = [
+        {
+          termino: `Fundamento conceptual de ${tituloGranulo}`,
+          definicion: conceptos[0] ? conceptos[0].definicion : `Aplicación rigurosa de los principios teóricos establecidos en ${tituloGranulo}.`
+        },
+        {
+          termino: `Diagnóstico de variables críticas`,
+          definicion: conceptos[1] ? conceptos[1].definicion : `Identificación oportuna de los factores condicionantes que inciden en el caso analizado.`
+        },
+        {
+          termino: `Gestión de riesgos y contingencias`,
+          definicion: conceptos[2] ? conceptos[2].definicion : `Evaluación de impactos y prevención de desviaciones operativas o metodológicas.`
+        },
+        {
+          termino: `Síntesis y toma de decisión integral`,
+          definicion: conceptos[3] ? conceptos[3].definicion : `Articulación coherente de todos los criterios estudiados en la semana para resolver el problema.`
+        }
+      ];
+
+      while (conceptos.length < 4) {
+        conceptos.push(baseRespaldo[conceptos.length]);
+      }
+
+      return conceptos;
+    }
+
+    function inferirRolDisciplinar(asignatura) {
+      const asigLower = asignatura.toLowerCase();
+      if (/enfermer|medicin|salud|clínic|clinic|urgenc|hospital|fisioterap|nutric/.test(asigLower)) {
+        return `Profesional Clínico / Especialista en ${asignatura}`;
+      }
+      if (/derecho|penal|civil|constitucional|jurídic|juridic|ley|procesal/.test(asigLower)) {
+        return `Consultor Jurídico / Analista en ${asignatura}`;
+      }
+      if (/ingenier|software|sistemas|datos|redes|arquitect|algoritm|comput/.test(asigLower)) {
+        return `Arquitecto de Soluciones / Ingeniero en ${asignatura}`;
+      }
+      if (/administrac|entornos|estrateg|gerenc|negocio|finanz|contab|mercad/.test(asigLower)) {
+        return `Director Estratégico / Consultor en ${asignatura}`;
+      }
+      if (/educac|pedagog|didáct|didact|docenc/.test(asigLower)) {
+        return `Diseñador Curricular / Especialista en ${asignatura}`;
+      }
+      return `Especialista Líder en ${asignatura}`;
+    }
+
+    function construirActividadLocal(meta) {
+      const conceptos = extraerConceptosClave(meta.contenido, meta.titulo);
+      const rol = inferirRolDisciplinar(meta.asignatura);
+      const top4 = conceptos.slice(0, 4);
+      const listaTerminos = top4.map(c => c.termino).join(', ');
+
+      // Determinar enfoque narrativo según la dinámica elegida
+      const esCrisis = meta.dinamica.startsWith('2.');
+      const esTrivia = meta.dinamica.startsWith('3.');
+      const esMatriz = meta.dinamica.startsWith('4.');
+
+      const tituloReto = esCrisis
+        ? `Gestión de Crisis Aplicada: ${meta.titulo}`
+        : esTrivia
+        ? `Desafío Diagnóstico: ${meta.titulo}`
+        : esMatriz
+        ? `Matriz de Análisis Cualitativo: ${meta.titulo}`
+        : `Simulador Estratégico: ${meta.titulo}`;
+
+      const contextoCaso = `En el marco de la asignatura ${meta.asignatura} (${meta.unidad}), asumes el rol de ${rol}. Se presenta un caso real de alta complejidad vinculado con "${meta.titulo}", donde es indispensable ${meta.objetivo.charAt(0).toLowerCase() + meta.objetivo.slice(1)}. Para resolver el desafío con rigor técnico, deberás aplicar los criterios fundamentales del gránulo semanal: ${listaTerminos}.`;
+
+      // Construir las 4 etapas secuenciales basadas en los 4 conceptos extraídos
+      const etiquetasEtapa = [
+        "Etapa 1 • Diagnóstico Inicial",
+        "Etapa 2 • Análisis de Variables Críticas",
+        "Etapa 3 • Intervención y Control de Riesgos",
+        "Etapa 4 • Decisión Estratégica Integral"
+      ];
+
+      const etapas = top4.map((concepto, idx) => {
+        const otroConcepto = top4[(idx + 1) % top4.length];
+
+        let pregunta = "";
+        if (esTrivia) {
+          pregunta = `De acuerdo con el contenido del gránulo sobre "${concepto.termino}", ¿cuál es el criterio técnico correcto que debe aplicarse en esta situación?`;
+        } else if (esMatriz) {
+          pregunta = `Al clasificar este caso dentro de la matriz de análisis de "${meta.titulo}", ¿cómo debe valorarse el factor "${concepto.termino}"?`;
+        } else if (esCrisis) {
+          pregunta = `¡Alerta crítica en el caso! Se manifiesta una situación vinculada directamente con "${concepto.termino}". Como ${rol}, ¿qué acción priorizas de inmediato?`;
+        } else {
+          pregunta = `Frente al componente "${concepto.termino}" dentro del caso de ${meta.titulo}, ¿qué curso de acción garantiza el cumplimiento del objetivo de aprendizaje?`;
+        }
+
+        // Generar 3 opciones con orden determinista variado para evitar patrones predecibles
+        const opcionesBase = [
+          {
+            puntaje: 25,
+            nivelImpacto: "Decisión Óptima",
+            texto: `Aplicar rigurosamente el criterio de ${concepto.termino}: ${concepto.definicion}`,
+            retroalimentacion: `¡Excelente criterio! Has aplicado con precisión el fundamento de "${concepto.termino}" (${concepto.definicion}), lo cual responde directamente al objetivo de ${meta.objetivo.toLowerCase()}.`
+          },
+          {
+            puntaje: 15,
+            nivelImpacto: "Decisión Parcial / Riesgo Moderado",
+            texto: `Abordar el caso únicamente desde "${otroConcepto.termino}" postergando la verificación específica de "${concepto.termino}".`,
+            retroalimentacion: `Respuesta parcialmente adecuada. Aunque "${otroConcepto.termino}" es relevante en el gránulo, omitir la aplicación directa de "${concepto.termino}" (${concepto.definicion}) deja brechas técnicas en la solución.`
+          },
+          {
+            puntaje: 5,
+            nivelImpacto: "Decisión Inadecuada / Omisión Conceptual",
+            texto: `Proceder de forma intuitiva sin validar los parámetros de "${concepto.termino}" ni documentar su impacto en ${meta.titulo}.`,
+            retroalimentacion: `Esta opción compromete la rigurosidad técnica del caso. Según el gránulo de la semana, es indispensable considerar "${concepto.termino}": ${concepto.definicion}.`
+          }
+        ];
+
+        // Rotar posiciones según el índice de la etapa
+        const rotacion = idx % 3;
+        const opcionesRotadas = [
+          opcionesBase[rotacion],
+          opcionesBase[(rotacion + 1) % 3],
+          opcionesBase[(rotacion + 2) % 3]
+        ].map((op, i) => ({ ...op, id: `e${idx}_op${i}` }));
+
+        return {
+          numero: idx + 1,
+          tituloEtapa: `${etiquetasEtapa[idx]} (${concepto.termino})`,
+          escenarioPregunta: pregunta,
+          opciones: opcionesRotadas
+        };
+      });
+
+      // Construir Ficha Pedagógica de 5 Bloques
+      const productoPorDinamica = esMatriz
+        ? `Matriz de clasificación cualitativa y diagnóstico estructurado sobre "${meta.titulo}", sustentando cada variable (${listaTerminos}) con evidencias del caso.`
+        : esCrisis
+        ? `Bitácora de gestión de crisis y protocolo de respuesta priorizada frente a los escenarios de "${meta.titulo}".`
+        : esTrivia
+        ? `Informe de diagnóstico conceptual con la justificación técnica de las 4 etapas evaluadas en "${meta.titulo}".`
+        : `Propuesta de intervención y hoja de ruta estratégica aplicando los criterios de ${listaTerminos}.`;
+
+      const fichaDocente = {
+        situacion: `En la asignatura ${meta.asignatura} (${meta.unidad}), los estudiantes enfrentan un escenario realista relacionado con "${meta.titulo}", donde deben analizar variables complejas del entorno disciplinar (${listaTerminos}) sin recurrir a soluciones mecánicas.`,
+        mision: `${meta.objetivo} Asumiendo el rol de ${rol}, el estudiante debe superar las 4 etapas del simulador tomando decisiones fundamentadas en los conceptos clave del gránulo semanal.`,
+        instrucciones: [
+          `Revisar previamente los conceptos fundamentales del gránulo "${meta.titulo}": ${listaTerminos}.`,
+          `Ingresar al simulador interactivo y analizar el contexto inicial asignado al rol de ${rol}.`,
+          `Resolver secuencialmente las 4 etapas de decisión, leyendo la retroalimentación formativa de cada escenario.`,
+          `Descargar o registrar la bitácora final de desempeño y elaborar el entregable sustentando cada elección con base en la teoría de la semana.`
+        ],
+        productoEsperado: productoPorDinamica,
+        justificacionRubrica: `Se evaluará: (1) Dominio conceptual y aplicación rigurosa de ${listaTerminos} (40%); (2) Coherencia argumentativa en la toma de decisiones frente al caso (35%); y (3) Pertinencia de la solución respecto al resultado de aprendizaje: "${meta.objetivo}" (25%).`
+      };
+
+      return {
+        tituloReto,
+        rolEstudiante: rol,
+        contextoCaso,
+        conceptosExtraidos: conceptos,
+        etapas,
+        fichaDocente
+      };
+    }
+
+    // Procesar formulario del docente
+    function procesarGranulo(event) {
       event.preventDefault();
 
       const asignatura = document.getElementById('input-asignatura').value.trim();
@@ -556,156 +784,35 @@
       const errorBox = document.getElementById('error-box');
       const errorText = document.getElementById('error-text');
 
-      if (!asignatura || !titulo || !contenido) {
-        errorText.textContent = "Por favor completa la asignatura, el título del gránulo y el contenido clave.";
+      if (!asignatura || !unidad || !titulo || !objetivo || !contenido) {
+        errorText.textContent = "Por favor completa todos los campos obligatorios marcados con (*) antes de generar la actividad.";
+        errorBox.classList.remove('hidden');
+        return;
+      }
+
+      if (contenido.length < 20) {
+        errorText.textContent = "El contenido clave del gránulo es muy breve. Ingresa al menos un par de conceptos o definiciones de la semana.";
         errorBox.classList.remove('hidden');
         return;
       }
 
       errorBox.classList.add('hidden');
-      setEstadoCarga(true);
 
-      const apiKey = ""; // Inyectada automáticamente en tiempo de ejecución
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      const meta = { asignatura, unidad, titulo, dinamica, objetivo, contenido };
+      const actividadGenerada = construirActividadLocal(meta);
 
-      const systemInstruction = `Eres un experto diseñador instruccional universitario especializado en aprendizaje activo y gamificación educativa para TODAS las disciplinas académicas (Ciencias de la Salud, Derecho, Ingenierías, Ciencias Exactas, Humanidades, Artes, Ciencias Económicas, etc.).
-Tu tarea es transformar el gránulo temático ingresado por el docente en una actividad interactiva rigurosa, técnica y 100% fiel a los conceptos proporcionados.
-REGLAS ESTRICTAS:
-1. Adapta todo el lenguaje, el rol del estudiante, el escenario y los criterios de evaluación EXCLUSIVAMENTE a la asignatura y al contenido proporcionado por el docente. Nunca introduzcas temas ajenos a la materia ingresada.
-2. Genera exactamente 4 etapas o desafíos progresivos.
-3. Cada etapa debe tener exactamente 3 opciones de respuesta/decisión plausibles, donde una es técnicamente óptima (25 puntos), una es parcialmente adecuada o con reservas (15 puntos) y una es incorrecta o riesgosa (5 puntos).
-4. Cada opción debe incluir retroalimentación pedagógica fundamentada en los conceptos exactos del gránulo.`;
+      estado.metadatos = meta;
+      estado.actividad = actividadGenerada;
 
-      const userPrompt = `Construye una actividad interactiva bajo la dinámica "${dinamica}" utilizando estrictamente esta información del docente:
-- Asignatura: ${asignatura}
-- Unidad / Semana: ${unidad}
-- Título del Gránulo Temático: ${titulo}
-- Resultado de Aprendizaje: ${objetivo}
-- Contenido Clave / Conceptos del Gránulo:
-${contenido}`;
-
-      const payload = {
-        contents: [{ parts: [{ text: userPrompt }] }],
-        systemInstruction: { parts: [{ text: systemInstruction }] },
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: "OBJECT",
-            properties: {
-              tituloReto: { type: "STRING" },
-              rolEstudiante: { type: "STRING", description: "Rol profesional o disciplinar específico de la materia (ej. Médico Residente, Juez de Control, Arquitecto de Software)" },
-              contextoCaso: { type: "STRING", description: "Escenario realista y técnico contextualizado en la disciplina del docente" },
-              fichaDocente: {
-                type: "OBJECT",
-                properties: {
-                  situacion: { type: "STRING" },
-                  mision: { type: "STRING" },
-                  instrucciones: { type: "ARRAY", items: { type: "STRING" } },
-                  productoEsperado: { type: "STRING" },
-                  justificacionRubrica: { type: "STRING" }
-                },
-                required: ["situacion", "mision", "instrucciones", "productoEsperado", "justificacionRubrica"]
-              },
-              etapas: {
-                type: "ARRAY",
-                items: {
-                  type: "OBJECT",
-                  properties: {
-                    numero: { type: "INTEGER" },
-                    tituloEtapa: { type: "STRING" },
-                    escenarioPregunta: { type: "STRING" },
-                    opciones: {
-                      type: "ARRAY",
-                      items: {
-                        type: "OBJECT",
-                        properties: {
-                          id: { type: "STRING" },
-                          texto: { type: "STRING" },
-                          puntaje: { type: "INTEGER" },
-                          nivelImpacto: { type: "STRING", description: "Ej: Decisión Óptima, Decisión Parcial, Decisión Riesgosa / Incorrecta" },
-                          retroalimentacion: { type: "STRING" }
-                        },
-                        required: ["id", "texto", "puntaje", "nivelImpacto", "retroalimentacion"]
-                      }
-                    }
-                  },
-                  required: ["numero", "tituloEtapa", "escenarioPregunta", "opciones"]
-                }
-              }
-            },
-            required: ["tituloReto", "rolEstudiante", "contextoCaso", "fichaDocente", "etapas"]
-          }
-        }
-      };
-
-      const maxIntentos = 4;
-      let retraso = 1000;
-
-      for (let intento = 0; intento < maxIntentos; intento++) {
-        try {
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-
-          const data = await response.json();
-          const textoJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-          if (!textoJson) {
-            throw new Error("Respuesta vacía del servicio.");
-          }
-
-          const actividadParsed = JSON.parse(textoJson);
-
-          estado.metadatos = { asignatura, unidad, titulo, dinamica, objetivo };
-          estado.actividad = actividadParsed;
-
-          renderizarFichaDocente();
-          reiniciarSimulador();
-          habilitarPestanasSecundarias();
-          setEstadoCarga(false);
-          cambiarVista('estudiante');
-          mostrarNotificacion("¡Simulador y ficha pedagógica generados con éxito!", "exito");
-          return;
-
-        } catch (err) {
-          if (intento === maxIntentos - 1) {
-            setEstadoCarga(false);
-            errorText.textContent = "Ocurrió un inconveniente al conectar con el motor de generación. Por favor intenta nuevamente en unos segundos.";
-            errorBox.classList.remove('hidden');
-          } else {
-            await new Promise(resolve => setTimeout(resolve, retraso));
-            retraso *= 2;
-          }
-        }
-      }
-    }
-
-    function setEstadoCarga(cargando) {
-      const btn = document.getElementById('btn-generar');
-      const iconSparkle = document.getElementById('icon-sparkle');
-      const iconSpinner = document.getElementById('icon-spinner');
-      const texto = document.getElementById('btn-generar-texto');
-
-      btn.disabled = cargando;
-      if (cargando) {
-        iconSparkle.classList.add('hidden');
-        iconSpinner.classList.remove('hidden');
-        texto.textContent = "Construyendo simulador disciplinar y ficha...";
-      } else {
-        iconSparkle.classList.remove('hidden');
-        iconSpinner.classList.add('hidden');
-        texto.textContent = "Generar Actividad Interactiva y Ficha Docente";
-      }
+      renderizarFichaDocente();
+      reiniciarSimulador();
+      habilitarPestanasSecundarias();
+      cambiarVista('estudiante');
+      mostrarNotificacion("¡Simulador jugable y ficha pedagógica creados al instante!", "exito");
     }
 
     // =========================================================================
-    // MOTOR DEL SIMULADOR INTERACTIVO (VISTA DEL ESTUDIANTE)
+    // MOTOR DE JUEGO INTERACTIVO (PESTAÑA 2)
     // =========================================================================
     function reiniciarSimulador() {
       if (!estado.actividad || !estado.metadatos) return;
@@ -767,7 +874,6 @@ ${contenido}`;
     function seleccionarOpcion(opcion, botonSeleccionado) {
       estado.opcionSeleccionada = opcion;
 
-      // Actualizar estilos visuales de los botones
       document.querySelectorAll('.opcion-btn').forEach(btn => {
         btn.classList.remove('border-indigo-600', 'bg-indigo-50/60', 'shadow-xs');
         btn.classList.add('border-slate-200');
@@ -782,7 +888,6 @@ ${contenido}`;
       badgeSel.classList.remove('bg-slate-100', 'text-slate-700');
       badgeSel.classList.add('bg-indigo-600', 'text-white');
 
-      // Mostrar retroalimentación inmediata
       const fbBox = document.getElementById('etapa-feedback');
       const fbNivel = document.getElementById('feedback-nivel');
       const fbPuntos = document.getElementById('feedback-puntos');
@@ -843,20 +948,20 @@ ${contenido}`;
         iconBox.className = 'w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-emerald-100 text-emerald-700';
         badge.className = 'inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2 bg-emerald-600 text-white';
         badge.textContent = 'Desempeño Sobresaliente';
-        mensaje.textContent = 'Has aplicado con rigor técnico los conceptos del gránulo temático, tomando decisiones fundamentadas y resolviendo eficazmente cada etapa del desafío.';
+        mensaje.textContent = 'Has aplicado con rigor técnico los conceptos clave del gránulo semanal, tomando decisiones fundamentadas y resolviendo eficazmente cada etapa del desafío.';
       } else if (pct >= 60) {
         iconBox.className = 'w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-amber-100 text-amber-700';
         badge.className = 'inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2 bg-amber-500 text-white';
         badge.textContent = 'Desempeño Satisfactorio / En Desarrollo';
-        mensaje.textContent = 'Comprendes los principios generales del tema, aunque algunas decisiones presentaron vacíos conceptuales o riesgos que conviene revisar.';
+        mensaje.textContent = 'Comprendes los fundamentos generales del tema, aunque algunas decisiones dejaron aspectos clave sin atender. Revisa la retroalimentación de cada etapa.';
       } else {
         iconBox.className = 'w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-rose-100 text-rose-700';
         badge.className = 'inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2 bg-rose-600 text-white';
         badge.textContent = 'Requiere Refuerzo Conceptual';
-        mensaje.textContent = 'Las decisiones tomadas evidencian dificultades en la aplicación de los conceptos clave de la semana. Revisa la bitácora inferior e inténtalo de nuevo.';
+        mensaje.textContent = 'Las decisiones tomadas evidencian oportunidades de mejora en la aplicación de los conceptos del gránulo. Repasa la bitácora inferior e inténtalo nuevamente.';
       }
 
-      document.getElementById('res-puntaje-final').textContent = `Calificación Obtenida: ${total} / ${max} pts`;
+      document.getElementById('res-puntaje-final').textContent = `Puntaje Final: ${total} / ${max} pts`;
 
       const bitacora = document.getElementById('res-bitacora');
       bitacora.innerHTML = '';
@@ -895,19 +1000,19 @@ ${contenido}`;
         `Actividad: ${estado.actividad.tituloReto}`,
         `Rol Asumido: ${estado.actividad.rolEstudiante}`,
         `Puntaje Total: ${total} / ${max} puntos`,
-        `Fecha de realización: ${new Date().toLocaleString()}`,
+        `Fecha: ${new Date().toLocaleString()}`,
         `====================================================================\n`,
         ...estado.historial.map((h, i) =>
           `ETAPA ${i + 1}: ${h.etapa}\n- Decisión: ${h.decision}\n- Valoración: ${h.nivelImpacto} (+${h.puntaje} pts)\n- Retroalimentación: ${h.retroalimentacion}\n`
         )
       ].join('\n');
 
-      descargarArchivo(contenido, `Evidencia_${estado.metadatos.titulo.replace(/[^a-zA-Z0-9]/g, '_')}.txt`, 'text/plain;charset=utf-8');
-      mostrarNotificacion("Evidencia del estudiante descargada.", "exito");
+      descargarArchivo(contenido, `Evidencia_${sanitizarNombre(estado.metadatos.titulo)}.txt`, 'text/plain;charset=utf-8');
+      mostrarNotificacion("Evidencia descargada en formato .txt.", "exito");
     }
 
     // =========================================================================
-    // VISTA 3: FICHA DOCENTE Y EXPORTACIÓN DE JUEGO HTML INDEPENDIENTE
+    // FICHA DOCENTE Y EXPORTACIÓN (PESTAÑA 3)
     // =========================================================================
     function renderizarFichaDocente() {
       const f = estado.actividad.fichaDocente;
@@ -934,7 +1039,7 @@ ${contenido}`;
       const f = estado.actividad.fichaDocente;
       const m = estado.metadatos;
       return `====================================================================
-GUÍA DE RETO INTERACTIVO - ${m.asignatura.toUpperCase()}
+FICHA PEDAGÓGICA DE RETO INTERACTIVO - ${m.asignatura.toUpperCase()}
 ====================================================================
 UNIDAD / SEMANA: ${m.unidad}
 GRÁNULO TEMÁTICO: ${m.titulo}
@@ -942,19 +1047,19 @@ DINÁMICA PEDAGÓGICA: ${m.dinamica}
 TÍTULO DEL RETO: ${estado.actividad.tituloReto}
 ROL DEL ESTUDIANTE: ${estado.actividad.rolEstudiante}
 
-1. SITUACIÓN / CONTEXTO:
+1. SITUACIÓN / PROBLEMÁTICA REAL:
 ${f.situacion}
 
-2. MISIÓN / DESAFÍO:
+2. MISIÓN / DESAFÍO DEL ESTUDIANTE:
 ${f.mision}
 
-3. INSTRUCCIONES DE DESARROLLO:
+3. INSTRUCCIONES DE DESARROLLO PASO A PASO:
 ${f.instrucciones.map((inst, i) => `${i + 1}. ${inst}`).join('\n')}
 
 4. PRODUCTO ESPERADO:
 ${f.productoEsperado}
 
-5. JUSTIFICACIÓN Y CRITERIOS DE RÚBRICA:
+5. JUSTIFICACIÓN Y CRITERIOS DE EVALUACIÓN (RÚBRICA):
 ${f.justificacionRubrica}
 ====================================================================`;
     }
@@ -970,21 +1075,28 @@ ${f.justificacionRubrica}
       mostrarNotificacion("Ficha pedagógica copiada al portapapeles.", "exito");
     }
 
-    // Genera un archivo HTML 100% autónomo con el juego embebido para subir a Moodle/Canvas/GitHub
+    function descargarFichaTxt() {
+      if (!estado.actividad || !estado.metadatos) return;
+      const texto = construirTextoFicha();
+      descargarArchivo(texto, `Ficha_Reto_${sanitizarNombre(estado.metadatos.titulo)}.txt`, 'text/plain;charset=utf-8');
+      mostrarNotificacion("Ficha pedagógica descargada (.txt).", "exito");
+    }
+
+    // Genera un archivo HTML independiente con el simulador completo embebido
     function descargarHtmlStandalone() {
       if (!estado.actividad || !estado.metadatos) return;
 
-      const datosEmbebidos = JSON.stringify({
+      const datosSeguros = JSON.stringify({
         metadatos: estado.metadatos,
         actividad: estado.actividad
-      });
+      }).replace(/<\/script>/gi, '<\\/script>');
 
-      const htmlAutonomo = `<!DOCTYPE html>
+      const htmlIndependiente = `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${estado.actividad.tituloReto} - ${estado.metadatos.asignatura}</title>
+  <title>${escapeHtml(estado.actividad.tituloReto)} - ${escapeHtml(estado.metadatos.asignatura)}</title>
   <script src="https://cdn.tailwindcss.com"><\/script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>body { font-family: 'Inter', sans-serif; }</style>
@@ -993,27 +1105,31 @@ ${f.justificacionRubrica}
   <div class="max-w-4xl mx-auto">
     <div class="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-md mb-6 border-b-4 border-emerald-500">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-        <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">${estado.metadatos.asignatura} • ${estado.metadatos.unidad}</span>
-        <span class="text-xs font-semibold text-emerald-400 bg-slate-800 px-3 py-1 rounded-lg border border-slate-700">Rol: ${estado.actividad.rolEstudiante}</span>
+        <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">${escapeHtml(estado.metadatos.asignatura)} • ${escapeHtml(estado.metadatos.unidad)}</span>
+        <span class="text-xs font-semibold text-emerald-400 bg-slate-800 px-3 py-1 rounded-lg border border-slate-700">Rol: ${escapeHtml(estado.actividad.rolEstudiante)}</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-extrabold mb-4">${estado.actividad.tituloReto}</h1>
+      <h1 class="text-2xl sm:text-3xl font-extrabold mb-4">${escapeHtml(estado.actividad.tituloReto)}</h1>
       <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4 text-sm sm:text-base text-slate-200 leading-relaxed">
-        <strong class="text-emerald-400 block text-xs uppercase tracking-wider mb-1">Contexto del Caso</strong>
-        ${estado.actividad.contextoCaso}
+        <strong class="text-emerald-400 block text-xs uppercase tracking-wider mb-1">Situación / Escenario de Aplicación</strong>
+        ${escapeHtml(estado.actividad.contextoCaso)}
       </div>
     </div>
 
-    <div id="app-juego" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8"></div>
+    <div id="app-simulador" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8"></div>
   </div>
 
   <script>
-    const DATA = ${datosEmbebidos};
+    const DATA = ${datosSeguros};
     let paso = 0;
     let seleccion = null;
     let historial = [];
 
+    function esc(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     function render() {
-      const cont = document.getElementById('app-juego');
+      const cont = document.getElementById('app-simulador');
       const etapas = DATA.actividad.etapas;
 
       if (paso >= etapas.length) {
@@ -1028,22 +1144,27 @@ ${f.justificacionRubrica}
             <span class="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full text-white \${color} mb-2">\${nivel}</span>
             <h2 class="text-3xl font-extrabold text-slate-900">Puntaje Final: \${total} / \${max} pts</h2>
           </div>
-          <h3 class="font-bold text-slate-900 mb-4">Bitácora de Decisiones</h3>
+          <h3 class="font-bold text-slate-900 mb-4">Resumen de Decisiones y Retroalimentación</h3>
           <div class="space-y-3 mb-6">
             \${historial.map((h, i) => \`
               <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <div class="flex justify-between text-xs font-bold text-slate-500 mb-1">
-                  <span>ETAPA \${i + 1}: \${h.etapa}</span>
-                  <span>\${h.nivelImpacto} (+\${h.puntaje} pts)</span>
+                <div class="flex flex-wrap justify-between text-xs font-bold text-slate-500 mb-1">
+                  <span>ETAPA \${i + 1}: \${esc(h.etapa)}</span>
+                  <span>\${esc(h.nivelImpacto)} (+\${h.puntaje} pts)</span>
                 </div>
-                <p class="font-semibold text-sm text-slate-900 mb-1">"\${h.decision}"</p>
-                <p class="text-xs sm:text-sm text-slate-600">\${h.retroalimentacion}</p>
+                <p class="font-semibold text-sm text-slate-900 mb-1">"\${esc(h.decision)}"</p>
+                <p class="text-xs sm:text-sm text-slate-600">\${esc(h.retroalimentacion)}</p>
               </div>
             \`).join('')}
           </div>
-          <button onclick="reiniciar()" class="bg-slate-900 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl text-sm cursor-pointer">
-            Volver a Intentar
-          </button>
+          <div class="flex flex-wrap gap-3">
+            <button onclick="reiniciar()" class="bg-slate-900 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl text-sm cursor-pointer">
+              Volver a Intentar
+            </button>
+            <button onclick="descargarEvidencia()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl text-sm cursor-pointer">
+              Descargar Evidencia (.txt)
+            </button>
+          </div>
         \`;
         return;
       }
@@ -1059,23 +1180,23 @@ ${f.justificacionRubrica}
         <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-6">
           <div class="bg-emerald-500 h-full" style="width: \${((paso + 1) / etapas.length) * 100}%"></div>
         </div>
-        <span class="inline-block text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md mb-2">\${etapa.tituloEtapa}</span>
-        <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-5">\${etapa.escenarioPregunta}</h2>
+        <span class="inline-block text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md mb-2">\${esc(etapa.tituloEtapa)}</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-5">\${esc(etapa.escenarioPregunta)}</h2>
         <div class="space-y-3 mb-6">
           \${etapa.opciones.map((op, i) => \`
             <button onclick="elegir(\${i})" class="w-full text-left p-4 rounded-xl border-2 transition flex items-start gap-3 cursor-pointer \${seleccion === i ? 'border-indigo-600 bg-indigo-50/60' : 'border-slate-200 hover:border-slate-300'}">
               <span class="w-7 h-7 rounded-full font-bold text-sm flex items-center justify-center shrink-0 \${seleccion === i ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700'}">\${String.fromCharCode(65 + i)}</span>
-              <span class="text-sm sm:text-base font-medium text-slate-800">\${op.texto}</span>
+              <span class="text-sm sm:text-base font-medium text-slate-800">\${esc(op.texto)}</span>
             </button>
           \`).join('')}
         </div>
         \${seleccion !== null ? \`
           <div class="p-4 rounded-xl border mb-6 \${etapa.opciones[seleccion].puntaje >= 25 ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : etapa.opciones[seleccion].puntaje >= 15 ? 'bg-amber-50 border-amber-200 text-amber-950' : 'bg-rose-50 border-rose-200 text-rose-950'}">
             <div class="flex justify-between font-bold text-sm mb-1">
-              <span>\${etapa.opciones[seleccion].nivelImpacto}</span>
+              <span>\${esc(etapa.opciones[seleccion].nivelImpacto)}</span>
               <span>+\${etapa.opciones[seleccion].puntaje} pts</span>
             </div>
-            <p class="text-sm">\${etapa.opciones[seleccion].retroalimentacion}</p>
+            <p class="text-sm">\${esc(etapa.opciones[seleccion].retroalimentacion)}</p>
           </div>
         \` : ''}
         <div class="flex justify-end">
@@ -1097,14 +1218,43 @@ ${f.justificacionRubrica}
       render();
     }
     function reiniciar() { paso = 0; seleccion = null; historial = []; render(); }
+    function descargarEvidencia() {
+      const total = historial.reduce((a, b) => a + b.puntaje, 0);
+      const max = DATA.actividad.etapas.length * 25;
+      const txt = [
+        'EVIDENCIA DE SIMULACIÓN - ' + DATA.metadatos.asignatura,
+        'Reto: ' + DATA.actividad.tituloReto,
+        'Puntaje: ' + total + ' / ' + max + ' pts',
+        '--------------------------------------------------',
+        ...historial.map((h, i) => 'Etapa ' + (i+1) + ': ' + h.etapa + '\\nDecisión: ' + h.decision + '\\nResultado: ' + h.nivelImpacto + ' (+' + h.puntaje + ' pts)\\n')
+      ].join('\\n');
+      const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Evidencia_Simulador.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
     render();
   <\/script>
 </body>
 </html>`;
 
-      const nombreArchivo = `Simulador_${estado.metadatos.titulo.replace(/[^a-zA-Z0-9]/g, '_')}.html`;
-      descargarArchivo(htmlAutonomo, nombreArchivo, 'text/html;charset=utf-8');
-      mostrarNotificacion("Archivo HTML independiente del simulador descargado.", "exito");
+      descargarArchivo(htmlIndependiente, `Simulador_${sanitizarNombre(estado.metadatos.titulo)}.html`, 'text/html;charset=utf-8');
+      mostrarNotificacion("Juego HTML independiente descargado y listo para LMS.", "exito");
+    }
+
+    function sanitizarNombre(texto) {
+      return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_|_$/g, '');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
     }
 
     function descargarArchivo(contenido, nombreArchivo, mimeType) {
